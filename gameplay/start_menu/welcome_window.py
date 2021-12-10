@@ -1,15 +1,27 @@
-import sys
-
+# Main libs imports
+import pygame
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication, QMessageBox
 
+# Other libs imports
+import sys
+
+# Other game parts
+# import gameplay.car_menu.car_menu
+
+# System constants
 from main import VERSION
+
+# Game constants
+# EMPTY
+
 
 def generate_welcome():
     app = QApplication(sys.argv)
     w = QMessageBox()
     w.setWindowTitle('Welcome!')
-    w.setText(f'Welcome! In the current state the program isn\'t doing anything '
-              f'useful. You can explore the internal files to understand how the code is supposed to work in the future'
+    w.setText(f'New: \n'
+              f'1.5 screens are already implemented. \n'
+              f'Finally decided on how to redirect between screens.\n'
               f'\n\nVersion: {VERSION}\t\t\t')
     w.exec()
