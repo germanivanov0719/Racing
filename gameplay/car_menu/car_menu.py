@@ -33,7 +33,8 @@ class CarMenu:
         self.margin = 30
         self.vertical_padding = 200
         self.scroll_height = 100
-        self.edge_scale = 0.6
+        self.edge_scale = 1.6
+        self.selected_scale = 2
         # print(self.v)
 
     def render(self, screen):
@@ -64,9 +65,9 @@ class CarMenu:
         screen.blit(img_1.get_texture(self.edge_scale),
                     (self.center_img_horizontally(self.margin, width, img_1.get_width(self.edge_scale), self.margin),
                      self.center_img_vertically(self.vertical_padding, self.scroll_height // 2, img_1.get_height(self.edge_scale))))
-        screen.blit(img_2.get_texture(),
-                    (self.center_img_horizontally(2 * self.margin + width, width, img_2.get_width(), self.margin),
-                     self.center_img_vertically(self.vertical_padding, self.scroll_height // 2, img_2.get_height())))
+        screen.blit(img_2.get_texture(self.selected_scale),
+                    (self.center_img_horizontally(2 * self.margin + width, width, img_2.get_width(self.selected_scale), self.margin),
+                     self.center_img_vertically(self.vertical_padding, self.scroll_height // 2, img_2.get_height(self.selected_scale))))
         screen.blit(img_3.get_texture(self.edge_scale),
                     (self.center_img_horizontally(3 * self.margin + 2 * width, width, img_3.get_width(), self.margin),
                      self.center_img_vertically(self.vertical_padding, self.scroll_height // 2, img_3.get_height(self.edge_scale))))
