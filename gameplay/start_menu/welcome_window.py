@@ -21,7 +21,7 @@ def generate_welcome():
     w = QMessageBox()
     w.setWindowTitle('Welcome!')
     w.setText(f'New: \n'
-              f'1.5 screens are already implemented. \n'
-              f'Finally decided on how to redirect between screens.\n'
+              f'1.9 screens are already implemented. \n'
+              f'Added test vehicles, added vehicle scroll, other improvements.\n'
               f'\n\nVersion: {VERSION}\t\t\t')
     w.exec()
