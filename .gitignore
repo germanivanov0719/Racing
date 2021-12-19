@@ -34,3 +34,4 @@ resources/.DS_Store
 resources/Vehicles/.DS_Store
 resources/Vehicles/__pycache__/Vehicle.cpython-39.pyc
 resources/Vehicles/Textures/.DS_Store
+/venv_loginova/
