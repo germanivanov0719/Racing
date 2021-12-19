@@ -13,18 +13,18 @@ import resources.Vehicles.Vehicle
 from main import VERSION
 
 # Game constants
-from resources.fonts.FONTS import COMIC_SANS_REGULAR, COMIC_SANS_BOLD, COMIC_SANS_ITALIC
+from resources.fonts.FONTS import ORBITRON_REGULAR, ORBITRON_MEDIUM, ORBITRON_EXTRA_BOLD
 
 
 class CarMenu:
     def __init__(self):
         # 1. Heading
-        font = pygame.font.Font(COMIC_SANS_BOLD, 50)
+        font = pygame.font.Font(ORBITRON_MEDIUM, 50)
         self.heading = font.render('Select Your Car', True, pygame.Color("yellow"))
         self.heading_x = self.heading.get_width()
         self.heading_y = self.heading.get_height()
         # 2. Back
-        font = pygame.font.Font(COMIC_SANS_REGULAR, 24)
+        font = pygame.font.Font(ORBITRON_REGULAR, 24)
         self.back = font.render('Back', True, pygame.Color("green"))
         self.back_x = self.back.get_width()
         self.back_y = self.back.get_height()
