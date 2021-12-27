@@ -50,3 +50,7 @@ Docs/.DS_Store
 __pycache__/
 **/__pycache__
 venv3.9_german/
+resources/Vehicles/.DS_Store
+resources/Vehicles/Textures/.DS_Store
+gameplay/.DS_Store
+resources/fonts/.DS_Store
