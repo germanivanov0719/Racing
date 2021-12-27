@@ -46,3 +46,7 @@ Docs/.DS_Store
 *.pyc
 *.pyc
 *.pyc
+.idea/
+__pycache__/
+**/__pycache__
+venv3.9_german/
