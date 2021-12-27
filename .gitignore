@@ -54,3 +54,4 @@ resources/Vehicles/.DS_Store
 resources/Vehicles/Textures/.DS_Store
 gameplay/.DS_Store
 resources/fonts/.DS_Store
+*.swp
