@@ -6,6 +6,7 @@ import pygame
 
 # Other game parts
 import gameplay.car_menu.car_menu
+import gameplay.settings_menu.settings_menu
 
 # System constants
 from main import VERSION
@@ -33,21 +34,34 @@ class StartMenu:
         self.play_x = self.play.get_width()
         self.play_y = self.play.get_height()
         self.play_margin = 50
+        # 4. Settings button
+        self.settings = pygame.image.load('resources/Icons/settings_icon.png')
+        self.settings_scaling = 1
+        self.settings_margin = 20
+        self.settings = pygame.transform.scale(self.settings, (self.settings.get_width() // self.settings_scaling,) * 2)
+        self.settings_size = self.settings.get_width()
 
     def render(self, screen):
+        # Rendering fonts
         screen.blit(self.heading, (screen.get_width() // 2 - self.heading_x // 2,
                                    screen.get_height() // 2 - self.heading_y // 2 - self.play_y))
         screen.blit(self.info, (10,
                                 screen.get_height() - self.info_y))
         screen.blit(self.play, (screen.get_width() // 2 - self.play_x // 2,
                                 screen.get_height() // 2 - self.play_y // 2 + self.play_margin))
+        # Creating a rectangle around the "Play" button
         margin = self.play_margin // 2
         pygame.draw.rect(screen, pygame.Color('green'), (screen.get_width() // 2 - self.play_x // 2 - margin,
                                                          screen.get_height() // 2 - self.play_y // 2 + 2 * margin - 10,
                                                          self.play_x + 2 * margin,
                                                          self.play_y + margin), 3)
 
+        # Settings icon
+        screen.blit(self.settings, (screen.get_width() - self.settings_size - self.settings_margin,
+                                    self.settings_margin))
+
     def click_handler(self, pos, screen):
+        # Play button
         margin = self.play_margin // 2
         rect = [range(screen.get_width() // 2 - self.play_x // 2 - margin,
                       screen.get_width() // 2 - self.play_x // 2 - margin + self.play_x + 2 * margin),
@@ -55,6 +69,15 @@ class StartMenu:
                       screen.get_height() // 2 - self.play_y // 2 + 2 * margin - 10 + self.play_y + margin)]
         if pos[0] in rect[0] and pos[1] in rect[1]:
             return gameplay.car_menu.car_menu.CarMenu()
+        # Settings button
+        rect = [range(screen.get_width() - self.settings_size - self.settings_margin, screen.get_width()),
+                range(0, self.settings_margin + self.settings_size)]
+        print(rect)
+        if pos[0] in rect[0] and pos[1] in rect[1]:
+            print("hi")
+            gameplay.settings_menu.settings_menu.main()
+
+            return self
 
     def right_click_handler(self, pos, screen):
         return self.click_handler(pos, screen)
