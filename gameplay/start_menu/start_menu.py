@@ -74,8 +74,8 @@ class StartMenu:
                 range(0, self.settings_margin + self.settings_size)]
         print(rect)
         if pos[0] in rect[0] and pos[1] in rect[1]:
-            print("hi")
             gameplay.settings_menu.settings_menu.main()
+            pygame.event.clear()
 
             return self
 
