@@ -13,6 +13,12 @@ def create_all_highways():
         highways.append(resources.Highways.Highway.Highway(textures.index(t), t, 1, 1))
     return highways
 
+# CREATE TABLE "highway_table" (
+# 	"name"	INTEGER NOT NULL UNIQUE,
+# 	"img"	TEXT NOT NULL,
+# 	"lanes_per_direction"	TEXT NOT NULL,
+# 	"two_directions"	INTEGER NOT NULL
+# );
 
 class Highway:
     def __init__(self, name, img, lanes_per_direction, two_directions=False):
