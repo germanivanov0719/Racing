@@ -72,7 +72,7 @@ class StartMenu:
         # Settings button
         rect = [range(screen.get_width() - self.settings_size - self.settings_margin, screen.get_width()),
                 range(0, self.settings_margin + self.settings_size)]
-        print(rect)
+        # print(rect)
         if pos[0] in rect[0] and pos[1] in rect[1]:
             gameplay.settings_menu.settings_menu.main()
             pygame.event.clear()
