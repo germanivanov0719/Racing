@@ -1,13 +1,26 @@
+import sqlite3
+
 import pygame.image
 import resources.Highways.Textures.TEXTURES
 from resources.Highways.highway_generator import HighwayGeneration
+import os.path
 
 
 def create_all_highways():
     # Change to get from DB
-    textures = [resources.Highways.Textures.TEXTURES.ASPHALT_1,
-                resources.Highways.Textures.TEXTURES.SNOW_1,
-                resources.Highways.Textures.TEXTURES.DIRT_1]
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(BASE_DIR, "highways_table.db")
+    con = sqlite3.connect(db_path)
+    cur = con.cursor()
+    req = 'SELECT img from highway_table'
+    textures = []
+    for item in cur.execute(req).fetchall():
+        textures.append(item[0])
+
+    # textures = [resources.Highways.Textures.TEXTURES.ASPHALT_1,
+    #             resources.Highways.Textures.TEXTURES.SNOW_1,
+    #             resources.Highways.Textures.TEXTURES.DIRT_1]
+
     highways = []
     for t in textures:
         highways.append(resources.Highways.Highway.Highway(textures.index(t), t, 1, 1))
