@@ -14,10 +14,10 @@ def create_all_highways():
     return highways
 
 # CREATE TABLE "highway_table" (
-# 	"name"	INTEGER NOT NULL UNIQUE,
+# 	"name"	TEXT NOT NULL UNIQUE,
 # 	"img"	TEXT NOT NULL,
 # 	"lanes_per_direction"	TEXT NOT NULL,
-# 	"two_directions"	INTEGER NOT NULL
+# 	"two_directions"	TEXT NOT NULL
 # );
 
 class Highway:

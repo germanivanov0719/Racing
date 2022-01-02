@@ -16,14 +16,16 @@ def create_all_vehicles():
         vehicles.append(resources.Vehicles.Vehicle.Vehicle(textures.index(t), t, 1, 1, 1))
     return vehicles
 
-# CREATE TABLE "vihiles" (
+# CREATE TABLE "vehicle_table" (
 # 	"name"	TEXT NOT NULL UNIQUE,
 # 	"img"	TEXT NOT NULL,
 # 	"speed"	INTEGER NOT NULL,
 # 	"brakes"	INTEGER NOT NULL,
-# 	"acceleration"	INTEGER NOT NULL
+# 	"acceleration"	INTEGER NOT NULL,
+# 	"speed_multiplier"	INTEGER NOT NULL,
+# 	"brakes_multiplier"	INTEGER NOT NULL,
+# 	"acceleration_multiplier"	INTEGER NOT NULL
 # );
-
 
 class Vehicle:
     def __init__(self, name, img, speed, brakes, acceleration, multipliers=(1, 1, 1)):
