@@ -10,21 +10,28 @@ def create_all_vehicles():
     db_path = os.path.join("resources/Vehicles/vehicles_table.db")
     con = sqlite3.connect(db_path)
     cur = con.cursor()
-    req = 'SELECT img from vehicle_table'
-    textures = []
-    for item in cur.execute(req).fetchall():
-        textures.append(item[0])
+    textures = [item[0] for item in cur.execute('SELECT img from vehicle_table').fetchall()]
+    speed = [item[0] for item in cur.execute('SELECT speed from vehicle_table').fetchall()]
+    brakes = [item[0] for item in cur.execute('SELECT brakes from vehicle_table').fetchall()]
+    acceleration = [item[0] for item in cur.execute('SELECT acceleration from vehicle_table').fetchall()]
+    speed_multiplier = [item[0] for item in cur.execute('SELECT speed_multiplier from vehicle_table').fetchall()]
+    brakes_multiplier = [item[0] for item in cur.execute('SELECT brakes_multiplier from vehicle_table').fetchall()]
+    acceleration_multiplier = [item[0] for item in cur.execute('SELECT acceleration_multiplier from vehicle_table').fetchall()]
 
     # textures = [resources.Vehicles.Textures.TEXTURES.BUS_1,
     #             resources.Vehicles.Textures.TEXTURES.BUS_2,
     #             resources.Vehicles.Textures.TEXTURES.BUS_3,
     #             resources.Vehicles.Textures.TEXTURES.BUS_4,
     #             resources.Vehicles.Textures.TEXTURES.BUS_5]
-    # print(textures)
+
     vehicles = []
-    for t in textures:
-        vehicles.append(resources.Vehicles.Vehicle.Vehicle(textures.index(t), t, 1, 1, 1))
+    for car in range(len(textures)):
+        vehicles.append(resources.Vehicles.Vehicle.Vehicle(car, textures[car], speed[car], brakes[car], acceleration[car]))
     return vehicles
+
+    # for t in textures:
+    #     vehicles.append(resources.Vehicles.Vehicle.Vehicle(textures.index(t), t, 1, 1, 1))
+
 
 # CREATE TABLE "vehicle_table" (
 # 	"name"	TEXT NOT NULL UNIQUE,
