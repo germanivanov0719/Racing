@@ -22,7 +22,7 @@ from resources.fonts.FONTS import ORBITRON_REGULAR, ORBITRON_MEDIUM, ORBITRON_EX
 
 
 class HighwayMenu:
-    def __init__(self):
+    def __init__(self, selected=1):
         scaling = settings.get_scaling()
         # 1. Heading
         font = pygame.font.Font(ORBITRON_MEDIUM, int(50 * scaling))
@@ -39,9 +39,9 @@ class HighwayMenu:
         self.Play = font.render('Play', True, pygame.Color("green"))
         self.Play_x = self.Play.get_width()
         self.Play_y = self.Play.get_height()
-        self.arrow_margin_down = 10
-        self.arrow_height = 20
-        self.arrow_margin = 20
+        self.arrow_margin_down = int(10 * scaling)
+        self.arrow_height = int(20 * scaling)
+        self.arrow_margin = int(20 * scaling)
         # 4. Currency counter
         c = resources.currency_operations.CurrencyOperations()
         font = pygame.font.Font(ORBITRON_REGULAR, int(20 * scaling))
@@ -51,9 +51,9 @@ class HighwayMenu:
 
         # Creating Vehicles
         self.highways = resources.Highways.Highway.create_all_highways()
-        self.selected = 1
+        self.selected = selected
         # General
-        self.margin = 30
+        self.margin = int(30 * scaling)
         # Vehicle scroll
         self.vertical_padding = int(200 * scaling)
         self.scroll_height = int(100 * scaling)
@@ -103,7 +103,7 @@ class HighwayMenu:
                     (self.center_img_horizontally(2 * self.margin + width, width, img_2.get_width(self.selected_scale), self.margin),
                      self.center_img_vertically(self.vertical_padding, self.scroll_height // 2, img_2.get_height(self.selected_scale))))
         screen.blit(img_3.get_texture(self.edge_scale),
-                    (self.center_img_horizontally(3 * self.margin + 2 * width, width, img_3.get_width(), self.margin),
+                    (self.center_img_horizontally(3 * self.margin + 2 * width, width, img_3.get_width(self.edge_scale), self.margin),
                      self.center_img_vertically(self.vertical_padding, self.scroll_height // 2, img_3.get_height(self.edge_scale))))
         # Weather and Difficulty
 

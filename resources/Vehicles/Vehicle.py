@@ -24,11 +24,12 @@ def create_all_vehicles():
 # 	"acceleration"	INTEGER NOT NULL
 # );
 
+
 class Vehicle:
     def __init__(self, name, img, speed, brakes, acceleration, multipliers=(1, 1, 1)):
-        self.img = pygame.image.load(img)
+        self.__img = pygame.image.load(img)
         self.name = name
-        self.size = self.img.get_rect().size
+        self.__size = self.__img.get_rect().size
 
         self.speed_multiplier = multipliers[0]
         self.brakes_multiplier = multipliers[1]
@@ -40,10 +41,10 @@ class Vehicle:
         self.acceleration = acceleration
 
     def get_texture(self, scale=1):
-        return pygame.transform.scale(self.img, (self.size[0] * scale // 1, self.size[1] * scale // 1))
+        return pygame.transform.scale(self.__img, (self.__size[0] * scale // 1, self.__size[1] * scale // 1))
 
     def get_width(self, scale=1):
-        return self.size[0] * scale // 1
+        return self.__size[0] * scale // 1
 
     def get_height(self, scale=1):
-        return self.size[1] * scale // 1
+        return self.__size[1] * scale // 1

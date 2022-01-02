@@ -12,6 +12,8 @@ VERSION = '0.3'
 import gameplay.start_menu.welcome_window
 import gameplay.start_menu.start_menu
 from gameplay.settings_menu.settings import settings
+import gameplay.car_menu.car_menu
+import gameplay.highway_menu.highway_menu
 
 # Game constants
 reinitialization_required = False
@@ -53,13 +55,24 @@ if __name__ == '__main__':
             if event.type == pygame.VIDEORESIZE:
                 w = screen.get_width()
                 h = screen.get_height()
-                # print([w / width - 1, h / height - 1])
+                # Check if size is too small
+                if w < width / 2:
+                    w = width // 2
+                if h < height / 2:
+                    h = height // 2
+                if (w, h) != (screen.get_width(), screen.get_height()):
+                    screen = pygame.display.set_mode((w, h), pygame.RESIZABLE, vsync=settings.VSYNC)
+
                 # Some magical calculations to make the screen look as beautiful as possible
-                settings.RSF = abs(sorted([w / width - 1, h / height - 1], key=abs)[0] + 1)
+                settings.RSF = abs(sorted([w / width - 1, h / height - 1])[0] + 1)
+                # Applying scaling
                 settings.update_scaling()
-                # print(settings.RSF, settings.get_scaling())
                 del w, h
-                current_position.__init__()
+                if type(current_position) in [gameplay.car_menu.car_menu.CarMenu, gameplay.highway_menu.highway_menu.HighwayMenu]:
+                    sel = current_position.selected
+                    current_position.__init__(selected=sel)
+                else:
+                    current_position.__init__()
 
         current_position.render(screen)
         current_frame = (current_frame + 1) % settings.FPS

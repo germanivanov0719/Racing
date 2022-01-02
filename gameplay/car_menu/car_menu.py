@@ -20,7 +20,7 @@ from resources.fonts.FONTS import ORBITRON_REGULAR, ORBITRON_MEDIUM, ORBITRON_EX
 
 
 class CarMenu:
-    def __init__(self):
+    def __init__(self, selected=1):
         scaling = settings.get_scaling()
         # 1. Heading
         font = pygame.font.Font(ORBITRON_MEDIUM, int(50 * scaling))
@@ -37,9 +37,9 @@ class CarMenu:
         self.next = font.render('Next', True, pygame.Color("green"))
         self.next_x = self.next.get_width()
         self.next_y = self.next.get_height()
-        self.arrow_margin_down = 10
-        self.arrow_height = 20
-        self.arrow_margin = 20
+        self.arrow_margin_down = int(10 * scaling)
+        self.arrow_height = int(20 * scaling)
+        self.arrow_margin = int(20 * scaling)
         # 4. Currency counter
         c = resources.currency_operations.CurrencyOperations()
         font = pygame.font.Font(ORBITRON_REGULAR, int(20 * scaling))
@@ -49,9 +49,9 @@ class CarMenu:
 
         # Creating Vehicles
         self.vehicles = resources.Vehicles.Vehicle.create_all_vehicles()
-        self.selected = 1
+        self.selected = selected
         # General
-        self.margin = 30
+        self.margin = int(30 * scaling)
         # Vehicle scroll
         self.vertical_padding = int(200 * scaling)
         self.scroll_height = int(100 * scaling)
@@ -103,7 +103,7 @@ class CarMenu:
                     (self.center_img_horizontally(2 * self.margin + width, width, img_2.get_width(self.selected_scale), self.margin),
                      self.center_img_vertically(self.vertical_padding, self.scroll_height // 2, img_2.get_height(self.selected_scale))))
         screen.blit(img_3.get_texture(self.edge_scale),
-                    (self.center_img_horizontally(3 * self.margin + 2 * width, width, img_3.get_width(), self.margin),
+                    (self.center_img_horizontally(3 * self.margin + 2 * width, width, img_3.get_width(self.edge_scale), self.margin),
                      self.center_img_vertically(self.vertical_padding, self.scroll_height // 2, img_3.get_height(self.edge_scale))))
         # Specifications and upgrades
 
