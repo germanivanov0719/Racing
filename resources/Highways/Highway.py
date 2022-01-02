@@ -11,18 +11,20 @@ def create_all_highways():
     db_path = os.path.join("resources/Highways/highways_table.db")
     con = sqlite3.connect(db_path)
     cur = con.cursor()
-    req = 'SELECT img from highway_table'
-    textures = []
-    for item in cur.execute(req).fetchall():
-        textures.append(item[0])
+    textures = [item[0] for item in cur.execute('SELECT img from highway_table').fetchall()]
+    lanes_per_direction = [item[0] for item in cur.execute('SELECT lanes_per_direction from highway_table').fetchall()]
+    two_directions = [item[0] for item in cur.execute('SELECT two_directions from highway_table').fetchall()]
 
     # textures = [resources.Highways.Textures.TEXTURES.ASPHALT_1,
     #             resources.Highways.Textures.TEXTURES.SNOW_1,
     #             resources.Highways.Textures.TEXTURES.DIRT_1]
 
     highways = []
-    for t in textures:
-        highways.append(resources.Highways.Highway.Highway(textures.index(t), t, 1, 1))
+    for car in range(len(textures)):
+        highways.append(resources.Highways.Highway.Highway(car, textures[car], lanes_per_direction[car], two_directions[car]))
+
+    # for t in textures:
+    #     highways.append(resources.Highways.Highway.Highway(textures.index(t), t, 1, 1))
     return highways
 
 # CREATE TABLE "highway_table" (
