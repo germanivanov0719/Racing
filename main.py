@@ -3,7 +3,7 @@ import pygame
 import PyQt5
 
 # System constants
-VERSION = '0.2.1'
+VERSION = '0.3'
 
 # Other libs imports
 # EMPTY
@@ -11,24 +11,28 @@ VERSION = '0.2.1'
 # Other game parts
 import gameplay.start_menu.welcome_window
 import gameplay.start_menu.start_menu
+from gameplay.settings_menu.settings import settings
 
 # Game constants
-# EMPTY
-
+reinitialization_required = False
 
 if __name__ == '__main__':
+    # Initializing the game
     pygame.init()
-    pygame.display.set_caption(f'Racing (version {VERSION})')
-    size = width, height = 700, 700
-    clock = pygame.time.Clock()
-    screen = pygame.display.set_mode(size, pygame.RESIZABLE)
 
+    # Setting system settings and variables
+    pygame.display.set_caption(f'Racing (version {VERSION})')
+    size = width, height = 900, 700  # Default size: 900x700, do not change these variables in code
+    clock = pygame.time.Clock()
+    screen = pygame.display.set_mode(size, pygame.RESIZABLE, vsync=settings.VSYNC)
     running = True
-    FPS = 60
 
     current_frame = 0  # to change speed of different elements
 
+    # Start a game with the welcome window
     gameplay.start_menu.welcome_window.generate_welcome()
+
+    # Initialize the 1st menu
     current_position = gameplay.start_menu.start_menu.StartMenu()
 
     while running:
@@ -45,11 +49,26 @@ if __name__ == '__main__':
                     r = current_position.right_click_handler(pos=event.pos, screen=screen)
                     if r is not None:
                         current_position = r
+            # Check if window is resized
+            if event.type == pygame.VIDEORESIZE:
+                w = screen.get_width()
+                h = screen.get_height()
+                # print([w / width - 1, h / height - 1])
+                # Some magical calculations to make the screen look as beautiful as possible
+                settings.RSF = abs(sorted([w / width - 1, h / height - 1], key=abs)[0] + 1)
+                settings.update_scaling()
+                # print(settings.RSF, settings.get_scaling())
+                del w, h
+                current_position.__init__()
 
         current_position.render(screen)
-        current_frame = (current_frame + 1) % FPS
+        current_frame = (current_frame + 1) % settings.FPS
         pygame.display.flip()
-        clock.tick(FPS)
+        if settings.PRECISE_FPS:
+            clock.tick_busy_loop(settings.FPS)
+        else:
+            clock.tick(settings.FPS)
+
     pygame.quit()
 
 

@@ -10,7 +10,9 @@ import gameplay.start_menu.start_menu
 import gameplay.car_menu.car_menu
 import resources.Highways.Highway
 import gameplay.race.race
-import gameplay
+import resources.currency_operations
+from gameplay.settings_menu.settings import settings
+
 
 # System constants
 from main import VERSION
@@ -21,34 +23,42 @@ from resources.fonts.FONTS import ORBITRON_REGULAR, ORBITRON_MEDIUM, ORBITRON_EX
 
 class HighwayMenu:
     def __init__(self):
+        scaling = settings.get_scaling()
         # 1. Heading
-        font = pygame.font.Font(ORBITRON_MEDIUM, 50)
+        font = pygame.font.Font(ORBITRON_MEDIUM, int(50 * scaling))
         self.heading = font.render('Select a Highway', True, pygame.Color("yellow"))
         self.heading_x = self.heading.get_width()
         self.heading_y = self.heading.get_height()
         # 2. Back
-        font = pygame.font.Font(ORBITRON_REGULAR, 20)
+        font = pygame.font.Font(ORBITRON_REGULAR, int(20 * scaling))
         self.back = font.render('Back', True, pygame.Color("green"))
         self.back_x = self.back.get_width()
         self.back_y = self.back.get_height()
         # 3. Play
-        font = pygame.font.Font(ORBITRON_REGULAR, 30)
+        font = pygame.font.Font(ORBITRON_REGULAR, int(30 * scaling))
         self.Play = font.render('Play', True, pygame.Color("green"))
         self.Play_x = self.Play.get_width()
         self.Play_y = self.Play.get_height()
         self.arrow_margin_down = 10
         self.arrow_height = 20
         self.arrow_margin = 20
+        # 4. Currency counter
+        c = resources.currency_operations.CurrencyOperations()
+        font = pygame.font.Font(ORBITRON_REGULAR, int(20 * scaling))
+        self.curr = font.render('$' + str(c.get()), True, pygame.Color("green"))
+        self.curr_x = self.curr.get_width()
+        self.curr_y = self.curr.get_height()
+
         # Creating Vehicles
         self.highways = resources.Highways.Highway.create_all_highways()
         self.selected = 1
         # General
         self.margin = 30
         # Vehicle scroll
-        self.vertical_padding = 200
-        self.scroll_height = 100
-        self.edge_scale = .8
-        self.selected_scale = 1.15
+        self.vertical_padding = int(200 * scaling)
+        self.scroll_height = int(100 * scaling)
+        self.edge_scale = .8 * scaling
+        self.selected_scale = 1.15 * scaling
         # print(self.v)
 
     def render(self, screen):
@@ -60,6 +70,11 @@ class HighwayMenu:
         pygame.draw.rect(screen, pygame.Color('green'),
                          (self.margin - 5, self.margin + self.heading_y // 2 - self.back_y // 2 - 5,
                                                          self.back_x + 10, self.back_y + 10), 1)
+        # Currency counter
+        screen.blit(self.curr, (screen.get_width() - self.margin - self.curr_x, self.margin + self.heading_y // 2 - self.curr_y // 2))
+        pygame.draw.rect(screen, pygame.Color('green'),
+                         (screen.get_width() - self.margin - 5 - self.curr_x, self.margin + self.heading_y // 2 - self.curr_y // 2 - 5,
+                          self.curr_x + 10, self.curr_y + 10), 1)
         # Arrows to select the vehicle
         pygame.draw.line(screen, pygame.Color('white'),
                          (self.margin // 3 * 2, self.vertical_padding + self.margin),

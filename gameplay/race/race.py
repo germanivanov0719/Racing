@@ -8,6 +8,7 @@ import random
 # Other game parts
 import gameplay.start_menu.start_menu
 import gameplay.highway_menu.highway_menu
+from gameplay.settings_menu.settings import settings
 import resources.Highways.Highway
 
 # System constants
@@ -19,6 +20,7 @@ from resources.fonts.FONTS import ORBITRON_REGULAR, ORBITRON_MEDIUM, ORBITRON_EX
 
 class Race:
     def __init__(self, heading_y=20):
+        scaling = settings.get_scaling()
         # 1. Menu
         font = pygame.font.Font(ORBITRON_REGULAR, 20)
         self.menu = font.render('Menu', True, pygame.Color("green"))

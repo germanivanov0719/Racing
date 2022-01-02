@@ -1,7 +1,7 @@
 #! python3
 
 # How to use:
-# ./check-lines.py ./**/*.py
+# ./check-lines.py ./gameplay/**/*.py ./resources/**/*.py ./main.py
 
 import sys
 
