@@ -2,15 +2,27 @@
 # All non-playable vehicles must have size ≥ player vehicle's size
 import pygame.image
 import resources.Vehicles.Textures.TEXTURES
+import sqlite3
+import os
 
 
 def create_all_vehicles():
     # Change to get from DB
-    textures = [resources.Vehicles.Textures.TEXTURES.BUS_1,
-                resources.Vehicles.Textures.TEXTURES.BUS_2,
-                resources.Vehicles.Textures.TEXTURES.BUS_3,
-                resources.Vehicles.Textures.TEXTURES.BUS_4,
-                resources.Vehicles.Textures.TEXTURES.BUS_5]
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(BASE_DIR, "vehicles_table.db")
+    con = sqlite3.connect(db_path)
+    cur = con.cursor()
+    req = 'SELECT img from vehicle_table'
+    textures = []
+    for item in cur.execute(req).fetchall():
+        textures.append(item[0])
+
+    # textures = [resources.Vehicles.Textures.TEXTURES.BUS_1,
+    #             resources.Vehicles.Textures.TEXTURES.BUS_2,
+    #             resources.Vehicles.Textures.TEXTURES.BUS_3,
+    #             resources.Vehicles.Textures.TEXTURES.BUS_4,
+    #             resources.Vehicles.Textures.TEXTURES.BUS_5]
+    # print(textures)
     vehicles = []
     for t in textures:
         vehicles.append(resources.Vehicles.Vehicle.Vehicle(textures.index(t), t, 1, 1, 1))
