@@ -7,9 +7,7 @@ import os
 
 
 def create_all_vehicles():
-    # Change to get from DB
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    db_path = os.path.join(BASE_DIR, "vehicles_table.db")
+    db_path = os.path.join("resources/Vehicles/vehicles_table.db")
     con = sqlite3.connect(db_path)
     cur = con.cursor()
     req = 'SELECT img from vehicle_table'
@@ -38,6 +36,7 @@ def create_all_vehicles():
 # 	"brakes_multiplier"	INTEGER NOT NULL,
 # 	"acceleration_multiplier"	INTEGER NOT NULL
 # );
+
 
 class Vehicle:
     def __init__(self, name, img, speed, brakes, acceleration, multipliers=(1, 1, 1)):

@@ -8,8 +8,7 @@ import os.path
 
 def create_all_highways():
     # Change to get from DB
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    db_path = os.path.join(BASE_DIR, "highways_table.db")
+    db_path = os.path.join("resources/Highways/highways_table.db")
     con = sqlite3.connect(db_path)
     cur = con.cursor()
     req = 'SELECT img from highway_table'
