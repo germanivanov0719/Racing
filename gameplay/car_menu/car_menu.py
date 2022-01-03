@@ -121,6 +121,7 @@ class CarMenu:
                          8)
 
     def click_handler(self, pos, screen):
+        scaling = settings.get_scaling()
         # Back button
         rect = [range(self.margin - 5, self.margin - 5 + self.back_x + 10),
                 range(self.margin + self.heading_y // 2 - self.back_y // 2 - 5, self.margin + self.heading_y // 2 - self.back_y // 2 - 5 + self.back_y + 10)]
@@ -129,17 +130,25 @@ class CarMenu:
             return new_menu
 
         # Next button
-        if pos[0] > screen.get_width() - 150 and pos[1] > screen.get_height() - 150:
+        if pos[0] > screen.get_width() - 150 * scaling and pos[1] > screen.get_height() - 150 * scaling:
             new_menu = gameplay.highway_menu.highway_menu.HighwayMenu()
             return new_menu
 
         # Scroll buttons
-        if pos[0] < (screen.get_width() - 150) // 2 and pos[1] in range(self.vertical_padding, self.vertical_padding + self.scroll_height):
+        # Vehicles
+        width = (screen.get_width() - self.margin * 4 - 2 * self.margin) // 3
+        img_1 = self.vehicles[(self.selected - 1) % len(self.vehicles)]
+        img_2 = self.vehicles[self.selected % len(self.vehicles)]
+        img_3 = self.vehicles[(self.selected + 1) % len(self.vehicles)]
+        # if pos[0] < (screen.get_width() - 150 * scaling) // 2 and pos[1] in range(self.vertical_padding, self.vertical_padding + self.scroll_height):
+        if pos[0] < (screen.get_width() - 350 * scaling) // 2 and pos[1] in range(int(self.center_img_vertically(self.vertical_padding, self.scroll_height // 2, img_1.get_height(self.edge_scale))),
+                                                                                  int(self.center_img_vertically(self.vertical_padding, self.scroll_height // 2, img_1.get_height(self.edge_scale)) + img_1.get_height(self.edge_scale))):
             if self.selected - 1 < 0:
                 self.selected = len(self.vehicles) - 1
             else:
                 self.selected -= 1
-        if pos[0] > (screen.get_width() + 150) // 2 and pos[1] in range(self.vertical_padding, self.vertical_padding + self.scroll_height):
+        if pos[0] > (screen.get_width() + 350 * scaling) // 2 and pos[1] in range(int(self.center_img_vertically(self.vertical_padding, self.scroll_height // 2, img_3.get_height(self.edge_scale))),
+                                                                                  int(self.center_img_vertically(self.vertical_padding, self.scroll_height // 2, img_3.get_height(self.edge_scale)) + img_3.get_height(self.edge_scale))):
             self.selected = (self.selected + 1) % len(self.vehicles)
         # if pos[0] < screen.get_width() // 2:
         #     if self.selected - 1 < 0:

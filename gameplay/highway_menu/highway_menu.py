@@ -90,7 +90,7 @@ class HighwayMenu:
                          (screen.get_width() - self.margin // 3, self.vertical_padding + self.scroll_height // 2),
                          (screen.get_width() - self.margin // 3 * 2, self.vertical_padding + self.scroll_height -
                           self.margin), 3)
-        # Vehicles
+        # Highways
         width = (screen.get_width() - self.margin * 4 - 2 * self.margin) // 3
         img_1 = self.highways[(self.selected - 1) % len(self.highways)]
         img_2 = self.highways[self.selected % len(self.highways)]
@@ -121,6 +121,7 @@ class HighwayMenu:
                          8)
 
     def click_handler(self, pos, screen):
+        scaling = settings.get_scaling()
         # Back button
         rect = [range(self.margin - 5, self.margin - 5 + self.back_x + 10),
                 range(self.margin + self.heading_y // 2 - self.back_y // 2 - 5, self.margin + self.heading_y // 2 - self.back_y // 2 - 5 + self.back_y + 10)]
@@ -129,17 +130,41 @@ class HighwayMenu:
             return new_menu
 
         # Play button
-        if pos[0] > screen.get_width() - 150 and pos[1] > screen.get_height() - 150:
+        if pos[0] > screen.get_width() - 150 * scaling and pos[1] > screen.get_height() - 150 * scaling:
             return gameplay.race.race.Race(heading_y=self.heading_y)
 
-        # Scroll buttons
-        if pos[0] < (screen.get_width() - 150) // 2 and pos[1] in range(self.vertical_padding, self.vertical_padding + self.scroll_height):
+        # Highways
+        width = (screen.get_width() - self.margin * 4 - 2 * self.margin) // 3
+        img_1 = self.highways[(self.selected - 1) % len(self.highways)]
+        img_2 = self.highways[self.selected % len(self.highways)]
+        img_3 = self.highways[(self.selected + 1) % len(self.highways)]
+        # if pos[0] < (screen.get_width() - 150 * scaling) // 2 and pos[1] in range(self.vertical_padding, self.vertical_padding + self.scroll_height):
+        if pos[0] < (screen.get_width() - 350 * scaling) // 2 and pos[1] in range(
+                int(self.center_img_vertically(self.vertical_padding, self.scroll_height // 2,
+                                               img_1.get_height(self.edge_scale))),
+                int(self.center_img_vertically(self.vertical_padding, self.scroll_height // 2,
+                                               img_1.get_height(self.edge_scale)) + img_1.get_height(
+                    self.edge_scale))):
             if self.selected - 1 < 0:
                 self.selected = len(self.highways) - 1
             else:
                 self.selected -= 1
-        if pos[0] > (screen.get_width() + 150) // 2 and pos[1] in range(self.vertical_padding, self.vertical_padding + self.scroll_height):
+        if pos[0] > (screen.get_width() + 350 * scaling) // 2 and pos[1] in range(
+                int(self.center_img_vertically(self.vertical_padding, self.scroll_height // 2,
+                                               img_3.get_height(self.edge_scale))),
+                int(self.center_img_vertically(self.vertical_padding, self.scroll_height // 2,
+                                               img_3.get_height(self.edge_scale)) + img_3.get_height(
+                    self.edge_scale))):
             self.selected = (self.selected + 1) % len(self.highways)
+
+        # # Scroll buttons
+        # if pos[0] < (screen.get_width() - 150 * scaling) // 2 and pos[1] in range(self.vertical_padding, self.vertical_padding + self.scroll_height):
+        #     if self.selected - 1 < 0:
+        #         self.selected = len(self.highways) - 1
+        #     else:
+        #         self.selected -= 1
+        # if pos[0] > (screen.get_width() + 150 * scaling) // 2 and pos[1] in range(self.vertical_padding, self.vertical_padding + self.scroll_height):
+        #     self.selected = (self.selected + 1) % len(self.highways)
 
         return self
 
