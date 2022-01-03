@@ -58,73 +58,133 @@ class CarMenu:
         self.edge_scale = 1.6 * scaling
         self.selected_scale = 2 * scaling
         # print(self.v)
+        # Car Specifications:
+        # 1. Speed
+        font = pygame.font.Font(ORBITRON_REGULAR, int(20 * scaling))
+        self.speed = font.render('Speed:', True, pygame.Color("white"))
+        self.speed_x = self.speed.get_width()
+        self.speed_y = self.speed.get_height() 
+        # 2. Brakes
+        font = pygame.font.Font(ORBITRON_REGULAR, int(20 * scaling))
+        self.brakes = font.render('Brakes:', True, pygame.Color("white"))
+        self.brakes_x = self.brakes.get_width()
+        self.brakes_y = self.brakes.get_height()
+        # 3. Acceleration
+        font = pygame.font.Font(ORBITRON_REGULAR, int(20 * scaling))
+        self.acceleration = font.render('Acceleration:', True, pygame.Color("white"))
+        self.acceleration_x = self.acceleration.get_width()
+        self.acceleration_y = self.acceleration.get_height()
+        # Drawing properties
+        self.separator = int(10 * scaling)
+        self.rect_width = int(250 * scaling)
+
 
     def render(self, screen):
-        # Heading
-        screen.blit(self.heading, (screen.get_width() // 2 - self.heading_x // 2,
-                                   self.margin))
-        # Back button
-        screen.blit(self.back, (self.margin, self.margin + self.heading_y // 2 - self.back_y // 2))
-        pygame.draw.rect(screen, pygame.Color('green'),
-                         (self.margin - 5, self.margin + self.heading_y // 2 - self.back_y // 2 - 5,
-                                                         self.back_x + 10, self.back_y + 10), 1)
-        # Currency counter
-        screen.blit(self.curr, (
-        screen.get_width() - self.margin - self.curr_x, self.margin + self.heading_y // 2 - self.curr_y // 2))
-        pygame.draw.rect(screen, pygame.Color('green'),
-                         (screen.get_width() - self.margin - 5 - self.curr_x,
-                          self.margin + self.heading_y // 2 - self.curr_y // 2 - 5,
-                          self.curr_x + 10, self.curr_y + 10), 1)
-        # Arrows to select the vehicle
-        pygame.draw.line(screen, pygame.Color('white'),
-                         (self.margin // 3 * 2, self.vertical_padding + self.margin),
-                         (self.margin // 3, self.vertical_padding + self.scroll_height // 2), 3)
-        pygame.draw.line(screen, pygame.Color('white'),
-                         (self.margin // 3, self.vertical_padding + self.scroll_height // 2),
-                         (self.margin // 3 * 2, self.vertical_padding + self.scroll_height - self.margin), 3)
+            # Heading
+            screen.blit(self.heading, (screen.get_width() // 2 - self.heading_x // 2,
+                                       self.margin))
+            # Back button
+            screen.blit(self.back, (self.margin, self.margin + self.heading_y // 2 - self.back_y // 2))
+            pygame.draw.rect(screen, pygame.Color('green'),
+                             (self.margin - 5, self.margin + self.heading_y // 2 - self.back_y // 2 - 5,
+                              self.back_x + 10, self.back_y + 10), 1)
+            # Currency counter
+            screen.blit(self.curr, (
+                screen.get_width() - self.margin - self.curr_x, self.margin + self.heading_y // 2 - self.curr_y // 2))
+            pygame.draw.rect(screen, pygame.Color('green'),
+                             (screen.get_width() - self.margin - 5 - self.curr_x,
+                              self.margin + self.heading_y // 2 - self.curr_y // 2 - 5,
+                              self.curr_x + 10, self.curr_y + 10), 1)
+            # Arrows to select the vehicle
+            pygame.draw.line(screen, pygame.Color('white'),
+                             (self.margin // 3 * 2, self.vertical_padding + self.margin),
+                             (self.margin // 3, self.vertical_padding + self.scroll_height // 2), 3)
+            pygame.draw.line(screen, pygame.Color('white'),
+                             (self.margin // 3, self.vertical_padding + self.scroll_height // 2),
+                             (self.margin // 3 * 2, self.vertical_padding + self.scroll_height - self.margin), 3)
 
-        pygame.draw.line(screen, pygame.Color('white'),
-                         (screen.get_width() - self.margin // 3 * 2, self.vertical_padding + self.margin),
-                         (screen.get_width() - self.margin // 3, self.vertical_padding + self.scroll_height // 2), 3)
-        pygame.draw.line(screen, pygame.Color('white'),
-                         (screen.get_width() - self.margin // 3, self.vertical_padding + self.scroll_height // 2),
-                         (screen.get_width() - self.margin // 3 * 2, self.vertical_padding + self.scroll_height -
-                          self.margin), 3)
-        # Vehicles
-        width = (screen.get_width() - self.margin * 4 - 2 * self.margin) // 3
-        img_1 = self.vehicles[(self.selected - 1) % len(self.vehicles)]
-        img_2 = self.vehicles[self.selected % len(self.vehicles)]
-        img_3 = self.vehicles[(self.selected + 1) % len(self.vehicles)]
+            pygame.draw.line(screen, pygame.Color('white'),
+                             (screen.get_width() - self.margin // 3 * 2, self.vertical_padding + self.margin),
+                             (screen.get_width() - self.margin // 3, self.vertical_padding + self.scroll_height // 2), 3)
+            pygame.draw.line(screen, pygame.Color('white'),
+                             (screen.get_width() - self.margin // 3, self.vertical_padding + self.scroll_height // 2),
+                             (screen.get_width() - self.margin // 3 * 2, self.vertical_padding + self.scroll_height -
+                              self.margin), 3)
+            # Vehicles
+            width = (screen.get_width() - self.margin * 4 - 2 * self.margin) // 3
+            img_1 = self.vehicles[(self.selected - 1) % len(self.vehicles)]
+            img_2 = self.vehicles[self.selected % len(self.vehicles)]
+            img_3 = self.vehicles[(self.selected + 1) % len(self.vehicles)]
 
-        screen.blit(img_1.get_texture(self.edge_scale),
-                    (self.center_img_horizontally(self.margin, width, img_1.get_width(self.edge_scale), self.margin),
-                     self.center_img_vertically(self.vertical_padding, self.scroll_height // 2, img_1.get_height(self.edge_scale))))
-        screen.blit(img_2.get_texture(self.selected_scale),
-                    (self.center_img_horizontally(2 * self.margin + width, width, img_2.get_width(self.selected_scale), self.margin),
-                     self.center_img_vertically(self.vertical_padding, self.scroll_height // 2, img_2.get_height(self.selected_scale))))
-        screen.blit(img_3.get_texture(self.edge_scale),
-                    (self.center_img_horizontally(3 * self.margin + 2 * width, width, img_3.get_width(self.edge_scale), self.margin),
-                     self.center_img_vertically(self.vertical_padding, self.scroll_height // 2, img_3.get_height(self.edge_scale))))
-        # Specifications and upgrades
+            screen.blit(img_1.get_texture(self.edge_scale),
+                        (self.center_img_horizontally(self.margin, width, img_1.get_width(self.edge_scale), self.margin),
+                         self.center_img_vertically(self.vertical_padding, self.scroll_height // 2,
+                                                    img_1.get_height(self.edge_scale))))
+            screen.blit(img_2.get_texture(self.selected_scale),
+                        (self.center_img_horizontally(2 * self.margin + width, width, img_2.get_width(self.selected_scale),
+                                                      self.margin),
+                         self.center_img_vertically(self.vertical_padding, self.scroll_height // 2,
+                                                    img_2.get_height(self.selected_scale))))
+            screen.blit(img_3.get_texture(self.edge_scale),
+                        (self.center_img_horizontally(3 * self.margin + 2 * width, width, img_3.get_width(self.edge_scale),
+                                                      self.margin),
+                         self.center_img_vertically(self.vertical_padding, self.scroll_height // 2,
+                                                    img_3.get_height(self.edge_scale))))
+            # Specifications and upgrades:
+            # Specification names:
+            base_h = int(self.center_img_vertically(self.vertical_padding, self.scroll_height // 2,
+                                               img_1.get_height(self.edge_scale)) + img_1.get_height(self.edge_scale)) + self.margin * 3
+            screen.blit(self.speed, ((screen.get_width() - self.separator) // 2 - self.speed_x, base_h))
+            screen.blit(self.brakes, ((screen.get_width() - self.separator) // 2 - self.brakes_x, base_h + self.margin + self.speed_y))
+            screen.blit(self.acceleration, ((screen.get_width() - self.separator) // 2 - self.acceleration_x, base_h + self.margin * 2 + self.brakes_y + self.speed_y))
+            # Specification values:
+            s, b, a = (i - 1.0 for i in img_1.get_multipliers())
+            pygame.draw.rect(screen, pygame.Color('green'),
+                             ((screen.get_width() + self.separator) // 2, base_h, self.rect_width * s, self.speed_y + 5))
+            pygame.draw.rect(screen, pygame.Color('green'),
+                             ((screen.get_width() + self.separator) // 2, base_h + self.margin + self.speed_y,
+                              self.rect_width * b, self.brakes_y + 5))
+            pygame.draw.rect(screen, pygame.Color('green'),
+                             ((screen.get_width() + self.separator) // 2,
+                              base_h + self.margin * 2 + self.brakes_y + self.speed_y, self.rect_width * a,
+                              self.acceleration_y + 5))
+            # Borders:
+            pygame.draw.rect(screen, pygame.Color('white'),
+                             ((screen.get_width() + self.separator) // 2, base_h, self.rect_width, self.speed_y + 5),
+                             width=2)
+            pygame.draw.rect(screen, pygame.Color('white'),
+                             ((screen.get_width() + self.separator) // 2, base_h + self.margin + self.speed_y,
+                              self.rect_width, self.brakes_y + 5),
+                             width=2)
+            pygame.draw.rect(screen, pygame.Color('white'),
+                             ((screen.get_width() + self.separator) // 2,
+                              base_h + self.margin * 2 + self.brakes_y + self.speed_y, self.rect_width,
+                              self.acceleration_y + 5),
+                             width=2)
 
-        # Next button
-        screen.blit(self.next, (screen.get_width() - self.next_x - self.margin,
-                                screen.get_height() - self.next_y - self.margin))
-        pygame.draw.line(screen, pygame.Color("green"),
-                         (screen.get_width() - self.next_x - self.margin + self.arrow_margin, screen.get_height() - self.next_y - self.arrow_margin_down - self.margin),
-                         (screen.get_width() - self.margin - self.arrow_margin, screen.get_height() - self.next_y - self.arrow_margin_down - self.arrow_height - self.margin), 8)
-        pygame.draw.line(screen, pygame.Color("green"),
-                         (screen.get_width() - self.margin - self.arrow_margin,
-                          screen.get_height() - self.next_y - self.arrow_margin_down - self.arrow_height - self.margin),
-                         (screen.get_width() - self.next_x - self.margin + self.arrow_margin,
-                          screen.get_height() - self.next_y - self.arrow_margin_down - 2 * self.arrow_height - self.margin),
-                         8)
+
+            # Next button
+            screen.blit(self.next, (screen.get_width() - self.next_x - self.margin,
+                                    screen.get_height() - self.next_y - self.margin))
+            pygame.draw.line(screen, pygame.Color("green"),
+                             (screen.get_width() - self.next_x - self.margin + self.arrow_margin,
+                              screen.get_height() - self.next_y - self.arrow_margin_down - self.margin),
+                             (screen.get_width() - self.margin - self.arrow_margin,
+                              screen.get_height() - self.next_y - self.arrow_margin_down - self.arrow_height - self.margin),
+                             8)
+            pygame.draw.line(screen, pygame.Color("green"),
+                             (screen.get_width() - self.margin - self.arrow_margin,
+                              screen.get_height() - self.next_y - self.arrow_margin_down - self.arrow_height - self.margin),
+                             (screen.get_width() - self.next_x - self.margin + self.arrow_margin,
+                              screen.get_height() - self.next_y - self.arrow_margin_down - 2 * self.arrow_height - self.margin),
+                             8)
 
     def click_handler(self, pos, screen):
         scaling = settings.get_scaling()
         # Back button
         rect = [range(self.margin - 5, self.margin - 5 + self.back_x + 10),
-                range(self.margin + self.heading_y // 2 - self.back_y // 2 - 5, self.margin + self.heading_y // 2 - self.back_y // 2 - 5 + self.back_y + 10)]
+                range(self.margin + self.heading_y // 2 - self.back_y // 2 - 5,
+                      self.margin + self.heading_y // 2 - self.back_y // 2 - 5 + self.back_y + 10)]
         if pos[0] in rect[0] and pos[1] in rect[1]:
             new_menu = gameplay.start_menu.start_menu.StartMenu()
             return new_menu
@@ -134,30 +194,26 @@ class CarMenu:
             new_menu = gameplay.highway_menu.highway_menu.HighwayMenu()
             return new_menu
 
-        # Scroll buttons
-        # Vehicles
-        width = (screen.get_width() - self.margin * 4 - 2 * self.margin) // 3
+        # Scroll buttons:
+        # Creating Vehicles
         img_1 = self.vehicles[(self.selected - 1) % len(self.vehicles)]
         img_2 = self.vehicles[self.selected % len(self.vehicles)]
         img_3 = self.vehicles[(self.selected + 1) % len(self.vehicles)]
-        # if pos[0] < (screen.get_width() - 150 * scaling) // 2 and pos[1] in range(self.vertical_padding, self.vertical_padding + self.scroll_height):
-        if pos[0] < (screen.get_width() - 350 * scaling) // 2 and pos[1] in range(int(self.center_img_vertically(self.vertical_padding, self.scroll_height // 2, img_1.get_height(self.edge_scale))),
-                                                                                  int(self.center_img_vertically(self.vertical_padding, self.scroll_height // 2, img_1.get_height(self.edge_scale)) + img_1.get_height(self.edge_scale))):
+        if pos[0] < (screen.get_width() - 350 * scaling) // 2 and pos[1] in range(
+                int(self.center_img_vertically(self.vertical_padding, self.scroll_height // 2,
+                                               img_1.get_height(self.edge_scale))),
+                int(self.center_img_vertically(self.vertical_padding, self.scroll_height // 2,
+                                               img_1.get_height(self.edge_scale)) + img_1.get_height(self.edge_scale))):
             if self.selected - 1 < 0:
                 self.selected = len(self.vehicles) - 1
             else:
                 self.selected -= 1
-        if pos[0] > (screen.get_width() + 350 * scaling) // 2 and pos[1] in range(int(self.center_img_vertically(self.vertical_padding, self.scroll_height // 2, img_3.get_height(self.edge_scale))),
-                                                                                  int(self.center_img_vertically(self.vertical_padding, self.scroll_height // 2, img_3.get_height(self.edge_scale)) + img_3.get_height(self.edge_scale))):
+        if pos[0] > (screen.get_width() + 350 * scaling) // 2 and pos[1] in range(
+                int(self.center_img_vertically(self.vertical_padding, self.scroll_height // 2,
+                                               img_3.get_height(self.edge_scale))),
+                int(self.center_img_vertically(self.vertical_padding, self.scroll_height // 2,
+                                               img_3.get_height(self.edge_scale)) + img_3.get_height(self.edge_scale))):
             self.selected = (self.selected + 1) % len(self.vehicles)
-        # if pos[0] < screen.get_width() // 2:
-        #     if self.selected - 1 < 0:
-        #         self.selected = len(self.vehicles) - 1
-        #     else:
-        #         self.selected -= 1
-        # else:
-        #     self.selected = (self.selected + 1) % len(self.vehicles)
-
         return self
 
     def right_click_handler(self, pos, screen):

@@ -26,7 +26,7 @@ def create_all_vehicles():
 
     vehicles = []
     for car in range(len(textures)):
-        vehicles.append(resources.Vehicles.Vehicle.Vehicle(car, textures[car], speed[car], brakes[car], acceleration[car]))
+        vehicles.append(resources.Vehicles.Vehicle.Vehicle(car, textures[car], speed[car], brakes[car], acceleration[car], (speed_multiplier[car], brakes_multiplier[car], acceleration_multiplier[car])))
     return vehicles
 
     # for t in textures:
@@ -51,14 +51,13 @@ class Vehicle:
         self.name = name
         self.__size = self.__img.get_rect().size
 
-        self.speed_multiplier = multipliers[0]
-        self.brakes_multiplier = multipliers[1]
-        self.acceleration_multiplier = multipliers[2]
-
-        # Change to data from the Car DB
         self.speed = speed
         self.brakes = brakes
         self.acceleration = acceleration
+
+        self.speed_multiplier = multipliers[0]
+        self.brakes_multiplier = multipliers[1]
+        self.acceleration_multiplier = multipliers[2]
 
     def get_texture(self, scale=1):
         return pygame.transform.scale(self.__img, (self.__size[0] * scale // 1, self.__size[1] * scale // 1))
@@ -68,3 +67,11 @@ class Vehicle:
 
     def get_height(self, scale=1):
         return self.__size[1] * scale // 1
+
+    def get_multipliers(self):
+        return self.speed_multiplier, self.brakes_multiplier, self.acceleration_multiplier
+
+    def set_multipliers(self, multipliers=(None, None, None)):
+        self.speed_multiplier = multipliers[0] if multipliers[0] and 1 <= multipliers[0] <= 2 else self.speed_multiplier
+        self.brakes_multiplier = multipliers[1] if multipliers[1] and 1 <= multipliers[1] <= 2 else self.brakes_multiplier
+        self.acceleration_multiplier = multipliers[2] if multipliers[2] and 1 <= multipliers[2] <= 2 else self.acceleration_multiplier
