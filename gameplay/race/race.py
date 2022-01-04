@@ -52,6 +52,12 @@ class Race:
         # Game engine:
         self.r.render_background()
 
+    def key_handler(self, screen, keys):
+        # Use something like "if keys[pygame.K_w]:" to handle different keys.
+        # Please, respect user preference, which is stored in "settings.CONTROLS"
+        # and can be either 'WASD' or 'Arrows'.
+        pass
+
 
     def click_handler(self, pos, screen):
         # Menu button

@@ -3,7 +3,7 @@ import pygame
 import PyQt5
 
 # System constants
-VERSION = '0.5'
+VERSION = '0.5.1'
 
 # Other libs imports
 # EMPTY
@@ -14,6 +14,7 @@ import gameplay.start_menu.start_menu
 from gameplay.settings_menu.settings import settings
 import gameplay.car_menu.car_menu
 import gameplay.highway_menu.highway_menu
+import gameplay.race.race
 
 # Game constants
 reinitialization_required = False
@@ -73,6 +74,9 @@ if __name__ == '__main__':
                     current_position.__init__(selected=sel)
                 else:
                     current_position.__init__()
+
+        if type(current_position) == gameplay.race.race.Race:
+            current_position.key_handler(screen, keys=pygame.key.get_pressed())
 
         current_position.render(screen)
         current_frame = (current_frame + 1) % settings.FPS
