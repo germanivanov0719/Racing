@@ -3,13 +3,11 @@ import sqlite3
 import pygame.image
 import resources.Highways.Textures.TEXTURES
 from resources.Highways.highway_generator import HighwayGeneration
-import os.path
 
 
 def create_all_highways():
     # Change to get from DB
-    db_path = os.path.join("resources/Highways/highways_table.db")
-    con = sqlite3.connect(db_path)
+    con = sqlite3.connect('resources/Highways/highways_table.db')
     cur = con.cursor()
     textures = [item[0] for item in cur.execute('SELECT img from highway_table').fetchall()]
     lanes_per_direction = [item[0] for item in cur.execute('SELECT lanes_per_direction from highway_table').fetchall()]

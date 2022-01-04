@@ -3,12 +3,10 @@
 import pygame.image
 import resources.Vehicles.Textures.TEXTURES
 import sqlite3
-import os
 
 
 def create_all_vehicles():
-    db_path = os.path.join("resources/Vehicles/vehicles_table.db")
-    con = sqlite3.connect(db_path)
+    con = sqlite3.connect('resources/Vehicles/vehicles_table.db')
     cur = con.cursor()
     textures = [item[0] for item in cur.execute('SELECT img from vehicle_table').fetchall()]
     speed = [item[0] for item in cur.execute('SELECT speed from vehicle_table').fetchall()]
@@ -59,9 +57,6 @@ class Vehicle:
         self.speed_multiplier = multipliers[0]
         self.brakes_multiplier = multipliers[1]
         self.acceleration_multiplier = multipliers[2]
-
-        self.con = sqlite3.connect(os.path.join("resources/Vehicles/vehicles_table.db"))
-        self.cur = self.con.cursor()
 
     def get_texture(self, scale=1):
         return pygame.transform.scale(self.__img, (self.__size[0] * scale // 1, self.__size[1] * scale // 1))
