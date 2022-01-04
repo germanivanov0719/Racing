@@ -20,8 +20,8 @@ def generate_welcome():
     app = QApplication(sys.argv)
     w = QMessageBox()
     w.setWindowTitle('Welcome!')
-    w.setText(f'Finally more than 500 clean lines of code!🎉🎉🎉\n\n'
-              f'New: \n'
-              f'See the changelog on GitHub.'
+    w.setText(f'New: \n'
+              f'- Still preparing to add the Game Engine.\n'
+              f'- See the changelog on GitHub.'
               f'\n\nVersion: {VERSION}\t\t\t')
     w.exec()
