@@ -41,7 +41,8 @@ def create_all_vehicles():
 # 	"acceleration"	INTEGER NOT NULL,
 # 	"speed_multiplier"	INTEGER NOT NULL,
 # 	"brakes_multiplier"	INTEGER NOT NULL,
-# 	"acceleration_multiplier"	INTEGER NOT NULL
+# 	"acceleration_multiplier"	INTEGER NOT NULL,
+# 	"cost"	INTEGER
 # );
 
 

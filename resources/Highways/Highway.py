@@ -30,8 +30,9 @@ def create_all_highways():
 # CREATE TABLE "highway_table" (
 # 	"name"	TEXT NOT NULL UNIQUE,
 # 	"img"	TEXT NOT NULL,
-# 	"lanes_per_direction"	TEXT NOT NULL,
-# 	"two_directions"	TEXT NOT NULL
+# 	"lanes_per_direction"	INTEGER,
+# 	"two_directions"	INTEGER NOT NULL DEFAULT 0,
+# 	"cost"	INTEGER
 # );
 
 class Highway:
