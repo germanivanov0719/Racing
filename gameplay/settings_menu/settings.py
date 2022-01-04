@@ -17,4 +17,5 @@ class Settings:
     def get_scaling(self) -> float:
         return self.__SCALING
 
+
 settings = Settings()

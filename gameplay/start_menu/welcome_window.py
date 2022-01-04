@@ -21,7 +21,7 @@ def generate_welcome():
     w = QMessageBox()
     w.setWindowTitle('Welcome!')
     w.setText(f'New: \n'
-              f'- Still preparing to add the Game Engine.\n'
+              f'- Implementing the Game Engine.\n'
               f'- See the changelog on GitHub.'
               f'\n\nVersion: {VERSION}\t\t\t')
     w.exec()

@@ -9,6 +9,7 @@ import random
 import gameplay.start_menu.start_menu
 import gameplay.highway_menu.highway_menu
 from gameplay.settings_menu.settings import settings
+import gameplay.race.renderer
 import resources.Highways.Highway
 
 # System constants
@@ -31,8 +32,14 @@ class Race:
         self.margin = int(30 * scaling)
         # Prevent resizing
         self.screen_locked = False
+        # Create renderer instance
+        self.r = None
 
     def render(self, screen):
+        # Initialize renderer
+        if self.r is None:
+            self.r = gameplay.race.renderer.Renderer(screen)
+        # Render GUI parts:
         # Prevent resizing
         if not self.screen_locked:
             screen = pygame.display.set_mode((screen.get_width(), screen.get_height()), vsync=settings.VSYNC)
@@ -42,6 +49,9 @@ class Race:
         pygame.draw.rect(screen, pygame.Color('green'),
                          (self.margin - 5, self.margin + self.heading_y // 2 - self.menu_y // 2 - 5,
                           self.menu_x + 10, self.menu_y + 10), 1)
+        # Game engine:
+        self.r.render_background()
+
 
     def click_handler(self, pos, screen):
         # Menu button
