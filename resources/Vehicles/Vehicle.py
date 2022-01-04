@@ -8,13 +8,15 @@ import sqlite3
 def create_all_vehicles():
     con = sqlite3.connect('resources/Vehicles/vehicles_table.db')
     cur = con.cursor()
+    names = [item[0] for item in cur.execute('SELECT name from vehicle_table').fetchall()]
     textures = [item[0] for item in cur.execute('SELECT img from vehicle_table').fetchall()]
     speed = [item[0] for item in cur.execute('SELECT speed from vehicle_table').fetchall()]
     brakes = [item[0] for item in cur.execute('SELECT brakes from vehicle_table').fetchall()]
     acceleration = [item[0] for item in cur.execute('SELECT acceleration from vehicle_table').fetchall()]
-    speed_multiplier = [item[0] for item in cur.execute('SELECT speed_multiplier from vehicle_table').fetchall()]
-    brakes_multiplier = [item[0] for item in cur.execute('SELECT brakes_multiplier from vehicle_table').fetchall()]
-    acceleration_multiplier = [item[0] for item in cur.execute('SELECT acceleration_multiplier from vehicle_table').fetchall()]
+    speed_multipliers = [item[0] for item in cur.execute('SELECT speed_multiplier from vehicle_table').fetchall()]
+    brakes_multipliers = [item[0] for item in cur.execute('SELECT brakes_multiplier from vehicle_table').fetchall()]
+    acceleration_multipliers = [item[0] for item in cur.execute('SELECT acceleration_multiplier from vehicle_table').fetchall()]
+    cur.close()
 
     # textures = [resources.Vehicles.Textures.TEXTURES.BUS_1,
     #             resources.Vehicles.Textures.TEXTURES.BUS_2,
@@ -23,8 +25,8 @@ def create_all_vehicles():
     #             resources.Vehicles.Textures.TEXTURES.BUS_5]
 
     vehicles = []
-    for car in range(len(textures)):
-        vehicles.append(resources.Vehicles.Vehicle.Vehicle(car, textures[car], speed[car], brakes[car], acceleration[car], (speed_multiplier[car], brakes_multiplier[car], acceleration_multiplier[car])))
+    for car in range(len(names)):
+        vehicles.append(resources.Vehicles.Vehicle.Vehicle(names[car], textures[car], speed[car], brakes[car], acceleration[car], (speed_multipliers[car], brakes_multipliers[car], acceleration_multipliers[car])))
     return vehicles
 
     # for t in textures:
@@ -70,19 +72,23 @@ class Vehicle:
     def get_multipliers(self):
         return self.speed_multiplier, self.brakes_multiplier, self.acceleration_multiplier
 
-    def set_speed_multiplier(self, car_name, new_speed_multiplier):
-        self.cur.execute(f"UPDATE vehicle_table SET speed_multiplier = {new_speed_multiplier} WHERE name = '{car_name}'")
-        self.con.commit()
+    def set_speed_multiplier(self, new_speed_multiplier):
+        con = sqlite3.connect('resources/Vehicles/vehicles_table.db')
+        cur = con.cursor()
+        cur.execute(f"UPDATE vehicle_table SET speed_multiplier = {new_speed_multiplier} WHERE name = '{self.name}'")
+        con.commit()
+        con.close()
 
-    def set_brakes_multiplier(self, car_name, new_brakes_multiplier):
-        self.cur.execute(f"UPDATE vehicle_table SET brakes_multiplier = {new_brakes_multiplier} WHERE name = '{car_name}'")
-        self.con.commit()
+    def set_brakes_multiplier(self, new_brakes_multiplier):
+        con = sqlite3.connect('resources/Vehicles/vehicles_table.db')
+        cur = con.cursor()
+        cur.execute(f"UPDATE vehicle_table SET brakes_multiplier = {new_brakes_multiplier} WHERE name = '{self.name}'")
+        con.commit()
+        con.close()
 
-    def set_acceleration_multiplier(self, car_name, new_acceleration_multiplier):
-        self.cur.execute(f"UPDATE vehicle_table SET acceleration_multiplier = {new_acceleration_multiplier} WHERE name = '{car_name}'")
-        self.con.commit()
-
-    def set_multipliers(self, multipliers=(None, None, None)):
-        self.speed_multiplier = multipliers[0] if multipliers[0] and 1 <= multipliers[0] <= 2 else self.speed_multiplier
-        self.brakes_multiplier = multipliers[1] if multipliers[1] and 1 <= multipliers[1] <= 2 else self.brakes_multiplier
-        self.acceleration_multiplier = multipliers[2] if multipliers[2] and 1 <= multipliers[2] <= 2 else self.acceleration_multiplier
+    def set_acceleration_multiplier(self, new_acceleration_multiplier):
+        con = sqlite3.connect('resources/Vehicles/vehicles_table.db')
+        cur = con.cursor()
+        cur.execute(f"UPDATE vehicle_table SET acceleration_multiplier = {new_acceleration_multiplier} WHERE name = '{self.name}'")
+        con.commit()
+        con.close()

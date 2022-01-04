@@ -7,7 +7,7 @@ class CurrencyOperations:
         self.count = 0
         try:
             with open('currency.dat', mode='r', encoding='utf-8') as f:
-                self.count = f.readlines()[0].strip()
+                self.count = int(f.readlines()[0].strip())
         except Exception:
             try:
                 with open('currency.dat', mode='w', encoding='utf-8') as f:
@@ -28,7 +28,7 @@ class CurrencyOperations:
         self.count += m
         self.write()
 
-    def buy(self, m):
+    def buy(self, m: int):
         if self.count - m >= 0:
             self.count -= m
             self.write()
@@ -37,3 +37,4 @@ class CurrencyOperations:
 
     def get(self) -> int:
         return self.count
+
