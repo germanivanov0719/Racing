@@ -59,6 +59,9 @@ class Vehicle:
         self.brakes_multiplier = multipliers[1]
         self.acceleration_multiplier = multipliers[2]
 
+        self.con = sqlite3.connect(os.path.join("resources/Vehicles/vehicles_table.db"))
+        self.cur = self.con.cursor()
+
     def get_texture(self, scale=1):
         return pygame.transform.scale(self.__img, (self.__size[0] * scale // 1, self.__size[1] * scale // 1))
 
@@ -70,6 +73,18 @@ class Vehicle:
 
     def get_multipliers(self):
         return self.speed_multiplier, self.brakes_multiplier, self.acceleration_multiplier
+
+    def set_speed_multiplier(self, car_name, new_speed_multiplier):
+        self.cur.execute(f"UPDATE vehicle_table SET speed_multiplier = {new_speed_multiplier} WHERE name = '{car_name}'")
+        self.con.commit()
+
+    def set_brakes_multiplier(self, car_name, new_brakes_multiplier):
+        self.cur.execute(f"UPDATE vehicle_table SET brakes_multiplier = {new_brakes_multiplier} WHERE name = '{car_name}'")
+        self.con.commit()
+
+    def set_acceleration_multiplier(self, car_name, new_acceleration_multiplier):
+        self.cur.execute(f"UPDATE vehicle_table SET acceleration_multiplier = {new_acceleration_multiplier} WHERE name = '{car_name}'")
+        self.con.commit()
 
     def set_multipliers(self, multipliers=(None, None, None)):
         self.speed_multiplier = multipliers[0] if multipliers[0] and 1 <= multipliers[0] <= 2 else self.speed_multiplier
