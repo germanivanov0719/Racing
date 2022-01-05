@@ -242,7 +242,7 @@ class CarMenu:
 
         co = resources.currency_operations.CurrencyOperations()
         vh = self.vehicles[self.selected % len(self.vehicles)]
-        if pos[0] in range(int(rect_speed[0]), int(rect_speed[0]) + int(rect_speed[2])) and pos[1] in range(int(
+        if pos[0] in range(int(rect_speed[0]), int(rect_speed[0]) + 2 * int(rect_speed[2])) and pos[1] in range(int(
                 rect_speed[1]), int(rect_speed[1]) + int(rect_speed[3])):
             if vh.get_multipliers()[0] < 2:
                 try:
@@ -251,7 +251,7 @@ class CarMenu:
                     self.__init__(selected=self.selected)
                 except NotEnoughMoneyException:
                     generate_not_enough_money_error(10)
-        if pos[0] in range(int(rect_brakes[0]), int(rect_brakes[0]) + int(rect_brakes[2])) and pos[1] in range(int(
+        if pos[0] in range(int(rect_brakes[0]), int(rect_brakes[0]) + 2 * int(rect_brakes[2])) and pos[1] in range(int(
                 rect_brakes[1]), int(rect_brakes[1]) + int(rect_brakes[3])):
             if vh.get_multipliers()[1] < 2:
                 try:
@@ -260,7 +260,7 @@ class CarMenu:
                     self.__init__(selected=self.selected)
                 except NotEnoughMoneyException:
                     generate_not_enough_money_error(10)
-        if pos[0] in range(int(rect_acceleration[0]), int(rect_acceleration[0]) + int(rect_acceleration[2])) and pos[1] in range(int(rect_acceleration[1]), int(rect_acceleration[1]) + int(rect_acceleration[3])):
+        if pos[0] in range(int(rect_acceleration[0]), int(rect_acceleration[0]) + 2 * int(rect_acceleration[2])) and pos[1] in range(int(rect_acceleration[1]), int(rect_acceleration[1]) + int(rect_acceleration[3])):
             if vh.get_multipliers()[2] < 2:
                 try:
                     co.buy(10)
