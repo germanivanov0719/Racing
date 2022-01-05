@@ -2,4 +2,5 @@ German Ivanov:
 resources/**/*
 gameplay/car_menu/**/*.py
 LOGINOVaaaaaaaaa:
-
+renderer.py
+highway_table.db
