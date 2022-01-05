@@ -33,13 +33,16 @@ class Renderer:
         return image
 
     def render_background(self):
-        # background = pygame.transform.scale(self.load_image('resources/Highways/Textures/road1.png'),
-        #                                 (self.width, self.height))
-
         self.screen.blit(settings.selected_highway.get_texture(width=self.screen.get_width()), (0, 0))
 
     def render_player_car(self):
-        # self.screen.blit(settings.selected_car.get_texture())
         settings.vehicles.draw(self.screen)
-        # self.rect = self.play_car.get_rect().move(self.width // 2, self.height - self.height // 2.7)
+        # settings.selected_car.check_collisions()
         # TODO: draw car
+
+
+class AsyncRenderer:
+    def move_traffic(self):
+        for sprite in settings.vehicles:
+            if sprite != settings.selected_car:
+                sprite.rect.y += settings.selected_car.v - settings.NPC_v

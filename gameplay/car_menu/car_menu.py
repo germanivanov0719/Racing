@@ -213,7 +213,7 @@ class CarMenu:
             new_menu = gameplay.highway_menu.highway_menu.HighwayMenu()
             settings.selected_car = self.vehicles[self.selected % len(self.vehicles)]
             # settings.selected_highway = self.highways[self.selected % len(self.highways)]
-            print(settings.selected_car)
+            # print(settings.selected_car)
             return new_menu
 
         # Scroll buttons

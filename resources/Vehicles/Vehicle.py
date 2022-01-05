@@ -55,13 +55,15 @@ class Vehicle(pygame.sprite.Sprite):
         self.name = name
         self.__size = self.image.get_rect().size
 
-        self.speed = speed
+        self.speed = speed  # Max speed
         self.brakes = brakes
         self.acceleration = acceleration
 
         self.speed_multiplier = multipliers[0]
         self.brakes_multiplier = multipliers[1]
         self.acceleration_multiplier = multipliers[2]
+
+        self.v = 5  # Current speed
 
         self.x, self.y = x, y
         self.rect = self.image.get_rect()
@@ -98,3 +100,7 @@ class Vehicle(pygame.sprite.Sprite):
         cur.execute(f"UPDATE vehicle_table SET acceleration_multiplier = {new_acceleration_multiplier} WHERE name = '{self.name}'")
         con.commit()
         con.close()
+
+    def check_collisions(self):
+        if pygame.sprite.spritecollide(settings.selected_car, settings.vehicles, False) == [self]:
+            self.kill()

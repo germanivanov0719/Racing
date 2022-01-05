@@ -3,7 +3,7 @@ import pygame
 import PyQt5
 
 # System constants
-VERSION = '0.5.5'
+VERSION = '0.6'
 
 # Other libs imports
 # EMPTY
@@ -88,5 +88,3 @@ if __name__ == '__main__':
             clock.tick(settings.FPS)
 
     pygame.quit()
-
-

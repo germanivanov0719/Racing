@@ -14,6 +14,7 @@ class Settings:
         self.selected_car = None
         self.selected_highway = None
         self.vehicles = pygame.sprite.Group()
+        self.NPC_v = 10
 
         # Private
         self.__SCALING = 1  #
