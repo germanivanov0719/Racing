@@ -3,7 +3,7 @@ import pygame
 import PyQt5
 
 # System constants
-VERSION = '0.5.3'
+VERSION = '0.5.4'
 
 # Other libs imports
 # EMPTY

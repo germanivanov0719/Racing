@@ -11,6 +11,7 @@ import gameplay.highway_menu.highway_menu
 import resources.Vehicles.Vehicle
 import resources.currency_operations
 from gameplay.settings_menu.settings import settings
+from resources.Error_Dialogs.errors_dialogs import generate_not_enough_money_error
 
 # System constants
 from main import VERSION
@@ -137,7 +138,7 @@ class CarMenu:
                          self.center_img_vertically(self.vertical_padding, self.scroll_height // 2,
                                                     img_3.get_height(self.edge_scale))))
             # Specifications and upgrades:
-            offset_left = .5 * (self.rect_width + self.speed_y)
+            offset_left = .5 * self.rect_width
             # Specification names:
             base_h = int(self.center_img_vertically(self.vertical_padding, self.scroll_height // 2, img_1.get_height(self.edge_scale)) + img_1.get_height(self.edge_scale)) + self.margin * 3
             screen.blit(self.speed, ((screen.get_width() - self.separator) // 2 - self.acceleration_x - offset_left, base_h))
@@ -169,12 +170,17 @@ class CarMenu:
                              width=2)
 
             # Upgrade buttons
+            c, w = ('green', 2) if img_2.get_multipliers()[0] < 2 else ('black', 0)
             screen.blit(self.upgrade, ((screen.get_width() + self.separator) // 2 - offset_left + self.rect_width + self.separator, base_h + self.upgrade_margin))
-            pygame.draw.rect(screen, pygame.Color('green'), ((screen.get_width() + self.separator) // 2 - offset_left + self.rect_width + self.separator - self.upgrade_margin, base_h, self.upgrade_size + 2 * self.upgrade_margin, self.upgrade_size + 2 * self.upgrade_margin), 2)
+            pygame.draw.rect(screen, pygame.Color(c), ((screen.get_width() + self.separator) // 2 - offset_left + self.rect_width + self.separator - self.upgrade_margin, base_h, self.upgrade_size + 2 * self.upgrade_margin, self.upgrade_size + 2 * self.upgrade_margin), w)
+
+            c, w = ('green', 2) if img_2.get_multipliers()[1] < 2 else ('black', 0)
             screen.blit(self.upgrade, ((screen.get_width() + self.separator) // 2 - offset_left + self.rect_width + self.separator, base_h + self.margin + self.speed_y + self.upgrade_margin))
-            pygame.draw.rect(screen, pygame.Color('green'), ((screen.get_width() + self.separator) // 2 - offset_left + self.rect_width + self.separator - self.upgrade_margin, base_h + self.margin + self.speed_y, self.upgrade_size + 2 * self.upgrade_margin, self.upgrade_size + 2 * self.upgrade_margin), 2)
+            pygame.draw.rect(screen, pygame.Color(c), ((screen.get_width() + self.separator) // 2 - offset_left + self.rect_width + self.separator - self.upgrade_margin, base_h + self.margin + self.speed_y, self.upgrade_size + 2 * self.upgrade_margin, self.upgrade_size + 2 * self.upgrade_margin), w)
+
+            c, w = ('green', 2) if img_2.get_multipliers()[2] < 2 else ('black', 0)
             screen.blit(self.upgrade, ((screen.get_width() + self.separator) // 2 - offset_left + self.rect_width + self.separator,  base_h + self.margin * 2 + self.brakes_y + self.speed_y + self.upgrade_margin))
-            pygame.draw.rect(screen, pygame.Color('green'), ((screen.get_width() + self.separator) // 2 - offset_left + self.rect_width + self.separator - self.upgrade_margin,  base_h + self.margin * 2 + self.brakes_y + self.speed_y, self.upgrade_size + 2 * self.upgrade_margin, self.upgrade_size + 2 * self.upgrade_margin), 2)
+            pygame.draw.rect(screen, pygame.Color(c), ((screen.get_width() + self.separator) // 2 - offset_left + self.rect_width + self.separator - self.upgrade_margin,  base_h + self.margin * 2 + self.brakes_y + self.speed_y, self.upgrade_size + 2 * self.upgrade_margin, self.upgrade_size + 2 * self.upgrade_margin), w)
 
             # Next button
             screen.blit(self.next, (screen.get_width() - self.next_x - self.margin,
@@ -238,15 +244,13 @@ class CarMenu:
         vh = self.vehicles[self.selected % len(self.vehicles)]
         if pos[0] in range(int(rect_speed[0]), int(rect_speed[0]) + int(rect_speed[2])) and pos[1] in range(int(
                 rect_speed[1]), int(rect_speed[1]) + int(rect_speed[3])):
-            print(vh.get_multipliers())
             if vh.get_multipliers()[0] < 2:
                 try:
                     co.buy(10)
                     vh.set_speed_multiplier(vh.get_multipliers()[0] + .05)
                     self.__init__(selected=self.selected)
                 except NotEnoughMoneyException:
-                    # Replace with Qt dialog later
-                    print('You don\'t have enough money!')
+                    generate_not_enough_money_error(10)
         if pos[0] in range(int(rect_brakes[0]), int(rect_brakes[0]) + int(rect_brakes[2])) and pos[1] in range(int(
                 rect_brakes[1]), int(rect_brakes[1]) + int(rect_brakes[3])):
             if vh.get_multipliers()[1] < 2:
@@ -255,8 +259,7 @@ class CarMenu:
                     vh.set_brakes_multiplier(vh.get_multipliers()[1] + .05)
                     self.__init__(selected=self.selected)
                 except NotEnoughMoneyException:
-                    # Replace with Qt dialog later
-                    print('You don\'t have enough money!')
+                    generate_not_enough_money_error(10)
         if pos[0] in range(int(rect_acceleration[0]), int(rect_acceleration[0]) + int(rect_acceleration[2])) and pos[1] in range(int(rect_acceleration[1]), int(rect_acceleration[1]) + int(rect_acceleration[3])):
             if vh.get_multipliers()[2] < 2:
                 try:
@@ -264,8 +267,7 @@ class CarMenu:
                     vh.set_acceleration_multiplier(vh.get_multipliers()[2] + .05)
                     self.__init__(selected=self.selected)
                 except NotEnoughMoneyException:
-                    # Replace with Qt dialog later
-                    print('You don\'t have enough money!')
+                    generate_not_enough_money_error(10)
         return self
 
     def right_click_handler(self, pos, screen):
