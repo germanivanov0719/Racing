@@ -26,26 +26,20 @@ class Renderer:
         self.screen = screen
         self.width = self.screen.get_width()
         self.height = self.screen.get_height()
-        self.render_play_car()
         # self.clock = pygame.
 
     def load_image(self, name):
         image = pygame.image.load(name)
         return image
+
     def render_background(self):
-        background = pygame.transform.scale(self.load_image('resources/Highways/Textures/road1.png'),
-                                        (self.width, self.height))
-        self.screen.blit(background, (0, 0))
+        # background = pygame.transform.scale(self.load_image('resources/Highways/Textures/road1.png'),
+        #                                 (self.width, self.height))
 
-    def render_play_car(self):
-        self.play_car = self.load_image('resources/Vehicles/Textures/bus_1.png')
-        self.rect = self.play_car.get_rect().move(self.width // 2, self.height - self.height // 2.7)
+        self.screen.blit(settings.selected_highway.get_texture(width=self.screen.get_width()), (0, 0))
+
+    def render_player_car(self):
+        # self.screen.blit(settings.selected_car.get_texture())
+        settings.vehicles.draw(self.screen)
+        # self.rect = self.play_car.get_rect().move(self.width // 2, self.height - self.height // 2.7)
         # TODO: draw car
-
-
-
-
-
-        # pygame.draw.rect(self.screen, pygame.Color('green'), (1, 1, 100, 100))
-
-

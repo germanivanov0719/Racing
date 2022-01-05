@@ -44,11 +44,17 @@ class Highway:
         if width is not None:
             scale = width / self.__img.get_rect()[2]
         if height is not None:
-            scale = width / self.__img.get_rect()[3]
+            scale = height / self.__img.get_rect()[3]
+        if width is not None and height is not None:
+            return pygame.transform.scale(self.__img, (width, height))
         return pygame.transform.scale(self.__img, (self.__size[0] * scale // 1, self.__size[1] * scale // 1))
 
-    def get_width(self, scale=1):
+    def set_texture(self, surface):
+        self.__img = surface
+        self.__size = self.__img.get_rect().size
+
+    def get_width(self, scale=1, width=None, height=None):
         return self.__size[0] * scale // 1
 
-    def get_height(self, scale=1):
+    def get_height(self, scale=1, width=None, height=None):
         return self.__size[1] * scale // 1

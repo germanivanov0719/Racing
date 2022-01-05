@@ -44,13 +44,15 @@ class Race:
         if not self.screen_locked:
             screen = pygame.display.set_mode((screen.get_width(), screen.get_height()), vsync=settings.VSYNC)
             self.screen_locked = True
+        # Game engine:
+        self.r.render_background()
         # Menu button
         screen.blit(self.menu, (self.margin, self.margin + self.heading_y // 2 - self.menu_y // 2))
         pygame.draw.rect(screen, pygame.Color('green'),
                          (self.margin - 5, self.margin + self.heading_y // 2 - self.menu_y // 2 - 5,
                           self.menu_x + 10, self.menu_y + 10), 1)
-        # Game engine:
-        self.r.render_background()
+        # Render player car
+        self.r.render_player_car()
 
     def key_handler(self, screen, keys):
         # Use something like "if keys[pygame.K_w]:" to handle different keys.

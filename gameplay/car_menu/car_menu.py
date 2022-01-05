@@ -211,6 +211,9 @@ class CarMenu:
         # Next button
         if pos[0] > screen.get_width() - 150 * scaling and pos[1] > screen.get_height() - 150 * scaling:
             new_menu = gameplay.highway_menu.highway_menu.HighwayMenu()
+            settings.selected_car = self.vehicles[self.selected % len(self.vehicles)]
+            # settings.selected_highway = self.highways[self.selected % len(self.highways)]
+            print(settings.selected_car)
             return new_menu
 
         # Scroll buttons

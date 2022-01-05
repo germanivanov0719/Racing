@@ -13,13 +13,11 @@ import gameplay.race.race
 import resources.currency_operations
 from gameplay.settings_menu.settings import settings
 
-
 # System constants
 from main import VERSION
 
 # Game constants
 from resources.fonts.FONTS import ORBITRON_REGULAR, ORBITRON_MEDIUM, ORBITRON_EXTRA_BOLD
-
 
 class HighwayMenu:
     def __init__(self, selected=1):
@@ -49,16 +47,17 @@ class HighwayMenu:
         self.curr_x = self.curr.get_width()
         self.curr_y = self.curr.get_height()
 
-        # Creating Vehicles
+        # Creating Highways
         self.highways = resources.Highways.Highway.create_all_highways()
         self.selected = selected
         # General
         self.margin = int(30 * scaling)
-        # Vehicle scroll
+        # Highway scroll
         self.vertical_padding = int(200 * scaling)
         self.scroll_height = int(100 * scaling)
         self.edge_scale = .8 * scaling
         self.selected_scale = 1.15 * scaling
+        self.desired_width = 200
         # print(self.v)
 
     def render(self, screen):
@@ -75,7 +74,7 @@ class HighwayMenu:
         pygame.draw.rect(screen, pygame.Color('green'),
                          (screen.get_width() - self.margin - 5 - self.curr_x, self.margin + self.heading_y // 2 - self.curr_y // 2 - 5,
                           self.curr_x + 10, self.curr_y + 10), 1)
-        # Arrows to select the vehicle
+        # Arrows to select the highway
         pygame.draw.line(screen, pygame.Color('white'),
                          (self.margin // 3 * 2, self.vertical_padding + self.margin),
                          (self.margin // 3, self.vertical_padding + self.scroll_height // 2), 3)
@@ -95,6 +94,10 @@ class HighwayMenu:
         img_1 = self.highways[(self.selected - 1) % len(self.highways)]
         img_2 = self.highways[self.selected % len(self.highways)]
         img_3 = self.highways[(self.selected + 1) % len(self.highways)]
+
+        img_1.set_texture(img_1.get_texture(height=self.desired_width))
+        img_2.set_texture(img_2.get_texture(height=self.desired_width))
+        img_3.set_texture(img_3.get_texture(height=self.desired_width))
 
         screen.blit(img_1.get_texture(self.edge_scale),
                     (self.center_img_horizontally(self.margin, width, img_1.get_width(self.edge_scale), self.margin),
@@ -121,17 +124,21 @@ class HighwayMenu:
                          8)
 
     def click_handler(self, pos, screen):
+        # global selected_highway
         scaling = settings.get_scaling()
         # Back button
         rect = [range(self.margin - 5, self.margin - 5 + self.back_x + 10),
                 range(self.margin + self.heading_y // 2 - self.back_y // 2 - 5, self.margin + self.heading_y // 2 - self.back_y // 2 - 5 + self.back_y + 10)]
         if pos[0] in rect[0] and pos[1] in rect[1]:
+            # import gameplay.car_menu.car_menu
             new_menu = gameplay.car_menu.car_menu.CarMenu()
             return new_menu
 
         # Play button
         if pos[0] > screen.get_width() - 150 * scaling and pos[1] > screen.get_height() - 150 * scaling:
+            settings.selected_highway = self.highways[self.selected % len(self.highways)]
             return gameplay.race.race.Race(heading_y=self.heading_y)
+
 
         # Highways
         width = (screen.get_width() - self.margin * 4 - 2 * self.margin) // 3

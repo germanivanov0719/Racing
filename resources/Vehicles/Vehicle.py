@@ -3,6 +3,8 @@
 import pygame.image
 import resources.Vehicles.Textures.TEXTURES
 import sqlite3
+import pygame.sprite
+from gameplay.settings_menu.settings import settings
 
 
 def create_all_vehicles():
@@ -46,11 +48,12 @@ def create_all_vehicles():
 # );
 
 
-class Vehicle:
-    def __init__(self, name, img, speed, brakes, acceleration, multipliers=(1, 1, 1)):
-        self.__img = pygame.image.load(img)
+class Vehicle(pygame.sprite.Sprite):
+    def __init__(self, name, img, speed, brakes, acceleration, multipliers=(1, 1, 1), x=0, y=0):
+        super().__init__(settings.vehicles)
+        self.image = pygame.image.load(img)
         self.name = name
-        self.__size = self.__img.get_rect().size
+        self.__size = self.image.get_rect().size
 
         self.speed = speed
         self.brakes = brakes
@@ -60,8 +63,11 @@ class Vehicle:
         self.brakes_multiplier = multipliers[1]
         self.acceleration_multiplier = multipliers[2]
 
+        self.x, self.y = x, y
+        self.rect = self.image.get_rect()
+
     def get_texture(self, scale=1):
-        return pygame.transform.scale(self.__img, (self.__size[0] * scale // 1, self.__size[1] * scale // 1))
+        return pygame.transform.scale(self.image, (self.__size[0] * scale // 1, self.__size[1] * scale // 1))
 
     def get_width(self, scale=1):
         return self.__size[0] * scale // 1

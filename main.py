@@ -18,6 +18,7 @@ import gameplay.race.race
 
 # Game constants
 reinitialization_required = False
+selected_highway = None
 
 if __name__ == '__main__':
     # Initializing the game
