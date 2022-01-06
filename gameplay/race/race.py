@@ -62,38 +62,19 @@ class Race:
         # Use something like "if keys[pygame.K_w]:" to handle different keys.
         # Please, respect user preference, which is stored in "settings.CONTROLS"
         # and can be either 'WASD' or 'Arrows'.
-        if keys[pygame.K_d]:
+        arrows_on = settings.CONTROLS == 'Arrows'
+        if arrows_on and keys[pygame.K_RIGHT] or not arrows_on and keys[pygame.K_d]:
             settings.selected_car.rect.x += 9
-            # if keys_down[pygame.K_w]:
-            #     player.rect.
-            # if keys_down[pygame.K_s]:
-            #     velY = 10
-        if keys[pygame.K_a]:
+        if arrows_on and keys[pygame.K_LEFT] or not arrows_on and keys[pygame.K_a]:
             settings.selected_car.rect.x -= 9
-        if keys[pygame.K_w]:
+        if arrows_on and keys[pygame.K_UP] or not arrows_on and keys[pygame.K_w]:
             settings.selected_car.v += 1
-        if keys[pygame.K_s]:
+        if arrows_on and keys[pygame.K_DOWN] or not arrows_on and keys[pygame.K_s]:
             settings.selected_car.v -= 1
             if settings.selected_car.v < settings.NPC_v + 2:
-                #
                 settings.selected_car.v = settings.NPC_v + 2
         # if keys[pygame.]
         pass
-
-    def arrows_control(self, screen, keys):
-        if keys[pygame.K_RIGHT]:
-            settings.selected_car.rect.x += 9
-        if keys[pygame.K_LEFT]:
-            settings.selected_car.rect.x -= 9
-        if keys[pygame.K_UP]:
-            settings.selected_car.v += 1
-        if keys[pygame.K_DOWN]:
-            settings.selected_car.v -= 1
-            if settings.selected_car.v < settings.NPC_v + 2:
-                #
-                settings.selected_car.v = settings.NPC_v + 2
-
-
 
     def click_handler(self, pos, screen):
         # Menu button

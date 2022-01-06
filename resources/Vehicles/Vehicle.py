@@ -63,7 +63,7 @@ class Vehicle(pygame.sprite.Sprite):
         self.brakes_multiplier = multipliers[1]
         self.acceleration_multiplier = multipliers[2]
 
-        self.v = 5  # Current speed
+        self.v = settings.NPC_v + 2  # Current speed
 
         self.x, self.y = x, y
         self.rect = self.image.get_rect()
