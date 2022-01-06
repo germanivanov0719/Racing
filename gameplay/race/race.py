@@ -73,8 +73,6 @@ class Race:
             settings.selected_car.v -= 1
             if settings.selected_car.v < settings.NPC_v + 2:
                 settings.selected_car.v = settings.NPC_v + 2
-        # if keys[pygame.]
-        pass
 
     def click_handler(self, pos, screen):
         # Menu button
