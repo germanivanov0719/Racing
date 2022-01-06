@@ -39,6 +39,7 @@ class Highway:
         self.__img = g.generate(pygame.image.load(img), lanes_per_direction, two_directions)
         self.name = name
         self.__size = self.__img.get_rect().size
+        self.x, self.y = 0, 0
 
     def get_texture(self, scale=1, width=None, height=None):
         if width is not None:
@@ -54,7 +55,12 @@ class Highway:
         self.__size = self.__img.get_rect().size
 
     def get_width(self, scale=1, width=None, height=None):
+        if width is not None:
+            return width
         return self.__size[0] * scale // 1
 
     def get_height(self, scale=1, width=None, height=None):
+        if width is not None:
+            return int(self.__size[1] * (width / self.__size[0]))
         return self.__size[1] * scale // 1
+
