@@ -77,7 +77,10 @@ if __name__ == '__main__':
                     current_position.__init__()
 
         if type(current_position) == gameplay.race.race.Race:
-            current_position.key_handler(screen, keys=pygame.key.get_pressed())
+            if gameplay.settings_menu.settings.settings.CONTROLS == "WASD":
+                current_position.key_handler(screen, keys=pygame.key.get_pressed())
+            else:
+                current_position.arrows_control(screen, keys=pygame.key.get_pressed())
 
         current_position.render(screen)
         current_frame = (current_frame + 1) % settings.FPS
