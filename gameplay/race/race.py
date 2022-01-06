@@ -10,6 +10,7 @@ import gameplay.start_menu.start_menu
 import gameplay.highway_menu.highway_menu
 from gameplay.settings_menu.settings import settings
 import gameplay.race.renderer
+from gameplay.race.reset_on_exit import reset
 import resources.Highways.Highway
 
 # System constants
@@ -39,24 +40,26 @@ class Race:
         # Initialize renderer
         if self.r is None:
             self.r = gameplay.race.renderer.Renderer(screen)
-        # Render GUI parts:
         # Prevent resizing
         if not self.screen_locked:
             screen = pygame.display.set_mode((screen.get_width(), screen.get_height()), vsync=settings.VSYNC)
             self.screen_locked = True
+
+        # Call all threads to make them start performing background tasks before rendering
+        ar = gameplay.race.renderer.AsyncRenderer()
+        ar.move_traffic()
+
         # Game engine:
         self.r.render_background()
+        # Render player car
+        self.r.render_player_car()
+
+        # Render GUI parts (must always be on top):
         # Menu button
         screen.blit(self.menu, (self.margin, self.margin + self.heading_y // 2 - self.menu_y // 2))
         pygame.draw.rect(screen, pygame.Color('green'),
                          (self.margin - 5, self.margin + self.heading_y // 2 - self.menu_y // 2 - 5,
                           self.menu_x + 10, self.menu_y + 10), 1)
-
-        # Render player car
-        self.r.render_player_car()
-        # Async
-        ar = gameplay.race.renderer.AsyncRenderer()
-        ar.move_traffic()
 
     def key_handler(self, screen, keys):
         # Use something like "if keys[pygame.K_w]:" to handle different keys.
@@ -80,10 +83,10 @@ class Race:
                 range(self.margin + self.heading_y // 2 - self.menu_y // 2 - 5,
                       self.margin + self.heading_y // 2 - self.menu_y // 2 - 5 + self.menu_y + 10)]
         if pos[0] in rect[0] and pos[1] in rect[1]:
-            new_menu = gameplay.highway_menu.highway_menu.HighwayMenu()
             screen = pygame.display.set_mode((screen.get_width(), screen.get_height()), pygame.RESIZABLE,
                                              vsync=settings.VSYNC)
-            return new_menu
+            reset()  # Call to reinitialize all objects
+            return gameplay.highway_menu.highway_menu.HighwayMenu()
 
         return self
 
