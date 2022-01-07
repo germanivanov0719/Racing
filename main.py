@@ -19,6 +19,7 @@ import gameplay.race.race
 # Game constants
 reinitialization_required = False
 selected_highway = None
+size = width, height = 900, 700  # Default size: 900x700, do not change these variables in code
 
 if __name__ == '__main__':
     # Initializing the game
@@ -26,7 +27,6 @@ if __name__ == '__main__':
 
     # Setting system settings and variables
     pygame.display.set_caption(f'Racing (version {VERSION})')
-    size = width, height = 900, 700  # Default size: 900x700, do not change these variables in code
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode(size, pygame.RESIZABLE, vsync=settings.VSYNC)
     running = True
@@ -58,10 +58,10 @@ if __name__ == '__main__':
                 w = screen.get_width()
                 h = screen.get_height()
                 # Check if size is too small
-                if w < width / 2:
-                    w = width // 2
-                if h < height / 2:
-                    h = height // 2
+                if w < width / 3:
+                    w = width // 3
+                if h < height / 3:
+                    h = height // 3
                 if (w, h) != (screen.get_width(), screen.get_height()):
                     screen = pygame.display.set_mode((w, h), pygame.RESIZABLE, vsync=settings.VSYNC)
 
@@ -77,10 +77,7 @@ if __name__ == '__main__':
                     current_position.__init__()
 
         if type(current_position) == gameplay.race.race.Race:
-            if gameplay.settings_menu.settings.settings.CONTROLS == "WASD":
-                current_position.key_handler(screen, keys=pygame.key.get_pressed())
-            else:
-                current_position.arrows_control(screen, keys=pygame.key.get_pressed())
+            current_position.key_handler(screen, keys=pygame.key.get_pressed())
 
         current_position.render(screen)
         current_frame = (current_frame + 1) % settings.FPS

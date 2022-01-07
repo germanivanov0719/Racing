@@ -1,4 +1,6 @@
 # Main libs imports
+import threading
+
 import pygame
 
 # Other libs imports
@@ -35,24 +37,27 @@ class Race:
         self.screen_locked = False
         # Create renderer instance
         self.r = None
+        self.ar = None
 
     def render(self, screen):
-        # Initialize renderer
-        if self.r is None:
+        # Initialize renderer and async renderer
+        if self.r is None or self.ar is None:
             self.r = gameplay.race.renderer.Renderer(screen)
+            self.ar = gameplay.race.renderer.AsyncRenderer(screen)
+            self.ar.create_daemons()
+
         # Prevent resizing
         if not self.screen_locked:
             screen = pygame.display.set_mode((screen.get_width(), screen.get_height()), vsync=settings.VSYNC)
             self.screen_locked = True
 
         # Call all threads to make them start performing background tasks before rendering
-        ar = gameplay.race.renderer.AsyncRenderer()
-        ar.move_traffic()
+        self.ar.generate()
 
         # Game engine:
         self.r.render_background()
         # Render player car
-        self.r.render_player_car()
+        self.r.render_cars()
 
         # Render GUI parts (must always be on top):
         # Menu button
@@ -60,6 +65,10 @@ class Race:
         pygame.draw.rect(screen, pygame.Color('green'),
                          (self.margin - 5, self.margin + self.heading_y // 2 - self.menu_y // 2 - 5,
                           self.menu_x + 10, self.menu_y + 10), 1)
+
+        # Check player collisions
+        if pygame.sprite.spritecollide(settings.selected_car, settings.vehicles, False) != [settings.selected_car]:
+            settings.selected_car.kill()
 
     def key_handler(self, screen, keys):
         # Use something like "if keys[pygame.K_w]:" to handle different keys.

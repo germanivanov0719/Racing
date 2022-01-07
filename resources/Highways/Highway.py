@@ -3,6 +3,7 @@ import sqlite3
 import pygame.image
 import resources.Highways.Textures.TEXTURES
 from resources.Highways.highway_generator import HighwayGeneration
+from gameplay.settings_menu.settings import settings
 
 
 def create_all_highways():
@@ -35,10 +36,14 @@ def create_all_highways():
 
 class Highway:
     def __init__(self, name, img, lanes_per_direction, two_directions=False):
-        g = HighwayGeneration()
-        self.__img = g.generate(pygame.image.load(img), lanes_per_direction, two_directions)
+        if isinstance(img, pygame.Surface):
+            self.__img = img
+        else:
+            self.__img = pygame.image.load(img)
         self.name = name
         self.__size = self.__img.get_rect().size
+        self.lanes_per_direction = lanes_per_direction
+        self.two_directions = two_directions
         self.x, self.y = 0, 0
 
     def get_texture(self, scale=1, width=None, height=None):
@@ -56,7 +61,7 @@ class Highway:
 
     def get_width(self, scale=1, width=None, height=None):
         if width is not None:
-            return width
+            return int(self.__size[0] * (height / self.__size[1]))
         return self.__size[0] * scale // 1
 
     def get_height(self, scale=1, width=None, height=None):
@@ -64,3 +69,8 @@ class Highway:
             return int(self.__size[1] * (width / self.__size[0]))
         return self.__size[1] * scale // 1
 
+    def get_total_lanes(self) -> int:
+        return self.lanes_per_direction * (self.two_directions + 1)
+
+    def get_size(self):
+        return self.__size

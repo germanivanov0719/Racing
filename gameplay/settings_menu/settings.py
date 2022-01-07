@@ -8,7 +8,7 @@ class Settings:
         self.PRECISE_FPS = False
         self.CONTROLS = 'WASD'
         self.GSF = 1  # Global scaling factor, set by the user settings
-        self.RSF = 1  # Resize scaling factor, calculated when the window is resized
+        self.RSF = 1  # Resize (Real) scaling factor, calculated when the window is resized
 
         # Selected, public
         self.selected_car = None
@@ -17,7 +17,7 @@ class Settings:
         self.NPC_v = 10
 
         # Private
-        self.__SCALING = 1  #
+        self.__SCALING = 1  # Calculated as GSF * RSF
 
     def update_scaling(self):
         self.__SCALING = self.GSF * self.RSF

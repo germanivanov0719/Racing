@@ -7,7 +7,7 @@ import pygame.sprite
 from gameplay.settings_menu.settings import settings
 
 
-def create_all_vehicles():
+def create_all_vehicles(initialize=True):
     con = sqlite3.connect('resources/Vehicles/vehicles_table.db')
     cur = con.cursor()
     names = [item[0] for item in cur.execute('SELECT name from vehicle_table').fetchall()]
@@ -28,7 +28,7 @@ def create_all_vehicles():
 
     vehicles = []
     for car in range(len(names)):
-        vehicles.append(resources.Vehicles.Vehicle.Vehicle(names[car], textures[car], speed[car], brakes[car], acceleration[car], (speed_multipliers[car], brakes_multipliers[car], acceleration_multipliers[car])))
+        vehicles.append(resources.Vehicles.Vehicle.Vehicle(names[car], textures[car], speed[car], brakes[car], acceleration[car], (speed_multipliers[car], brakes_multipliers[car], acceleration_multipliers[car]), initialize=initialize))
     return vehicles
 
     # for t in textures:
@@ -49,11 +49,16 @@ def create_all_vehicles():
 
 
 class Vehicle(pygame.sprite.Sprite):
-    def __init__(self, name, img, speed, brakes, acceleration, multipliers=(1, 1, 1), x=0, y=0):
-        super().__init__(settings.vehicles)
+    def __init__(self, name, img, speed, brakes, acceleration, multipliers=(1, 1, 1), x=0, y=0, initialize=True):
+        # To prevent non-initialized object from rendering
+        self.render = initialize
+
+        if self.render:
+            super().__init__(settings.vehicles)
+        else:
+            pass
         self.image = pygame.image.load(img)
         self.name = name
-        self.__size = self.image.get_rect().size
 
         self.speed = speed  # Max speed
         self.brakes = brakes
@@ -68,14 +73,20 @@ class Vehicle(pygame.sprite.Sprite):
         self.x, self.y = x, y
         self.rect = self.image.get_rect()
 
-    def get_texture(self, scale=1):
-        return pygame.transform.scale(self.image, (self.__size[0] * scale // 1, self.__size[1] * scale // 1))
+    def get_texture(self, scale=1, width=None, height=None):
+        if width is not None:
+            scale = width / self.image.get_rect()[2]
+        if height is not None:
+            scale = height / self.image.get_rect()[3]
+        if width is not None and height is not None:
+            return pygame.transform.scale(self.image, (width, height))
+        return pygame.transform.scale(self.image, (self.rect[2] * scale // 1, self.rect[3] * scale // 1))
 
     def get_width(self, scale=1):
-        return self.__size[0] * scale // 1
+        return self.rect[2] * scale // 1
 
     def get_height(self, scale=1):
-        return self.__size[1] * scale // 1
+        return self.rect[3] * scale // 1
 
     def get_multipliers(self):
         return self.speed_multiplier, self.brakes_multiplier, self.acceleration_multiplier
@@ -101,6 +112,14 @@ class Vehicle(pygame.sprite.Sprite):
         con.commit()
         con.close()
 
-    def check_collisions(self):
-        if pygame.sprite.spritecollide(settings.selected_car, settings.vehicles, False) == [self]:
-            self.kill()
+    def set_lane(self, lane, width):
+        lane_w = width / settings.selected_highway.get_total_lanes()
+        self.rect.x = lane_w * lane + 0.5 * (lane_w - self.get_width())
+
+    def do_render(self):
+        self.render = True
+        super().__init__(settings.vehicles)
+
+    def set_texture(self, img):
+        self.image = img
+        self.rect = img.get_rect()
