@@ -15,6 +15,7 @@ class Settings:
         self.selected_highway = None
         self.vehicles = pygame.sprite.Group()
         self.NPC_v = 10
+        self.scroll = pygame.sprite.Group()
 
         # Private
         self.__SCALING = 1  # Calculated as GSF * RSF
