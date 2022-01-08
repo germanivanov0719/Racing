@@ -38,7 +38,7 @@ def create_all_highways():
 
 class Highway(pygame.sprite.Sprite):
     def __init__(self, name, img, lanes_per_direction, two_directions=False):
-        super().__init__(settings.scroll)
+        # super().__init__(settings.scroll)
         if isinstance(img, pygame.Surface):
             self.image = img
         else:
@@ -48,6 +48,7 @@ class Highway(pygame.sprite.Sprite):
         self.lanes_per_direction = lanes_per_direction
         self.two_directions = two_directions
         self.to_be_removed = False
+        super().__init__(settings.scroll)
         # self.x, self.y = 0, 0
 
     def get_texture(self, scale=1, width=None, height=None):
