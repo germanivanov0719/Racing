@@ -86,6 +86,7 @@ class AsyncRenderer:
         self.daemons = []
         self.last_car = None
         self.r = Renderer(screen)
+        # self.car_remove_distance = /
 
     def generate(self):
         threading.Thread(target=self.move_traffic, daemon=True).start()
@@ -104,7 +105,7 @@ class AsyncRenderer:
 
     def generate_new_cars(self):
         while True:
-            if self.last_car is None or self.last_car.rect.y > self.last_car.rect[3] + 50:
+            if self.last_car is None or self.last_car.rect.y > self.screen.get_height():
                 num = random.randint(0, settings.selected_highway.get_total_lanes() - 1)
                 vhs = []
                 for c in resources.Vehicles.Vehicle.create_all_vehicles(False):
@@ -149,19 +150,8 @@ class AsyncRenderer:
                 hw = self.r.create_highway_texture()
                 hw.y = settings.scroll[0].y - hw.rect.h
                 settings.scroll.insert(0, hw)
-                # settings.scroll[0].y = -settings.scroll[1].y * len(settings.scroll) - 2
             print(settings.scroll[0].y)
-
-            # settings.scroll.append(self.r.create_highway_texture())
-            # settings.scroll.append(self.r.create_highway_texture())
-            #
-            # print(settings.scroll[0].get_height(width=self.screen.get_width()), settings.scroll[0].get_width(), self.screen.get_width())
-            # settings.scroll[1].y = -(len(settings.scroll) - 3) * settings.scroll[0].get_height(width=self.screen.get_width())
-            # # settings.scroll[0].y = -100
-            # # settings.scroll[1].y = -200
-            # print(settings.scroll[0].y, settings.scroll[1].y)
             print('Count:', len(settings.scroll))
-            # sleep(0.0001)
             sleep(.1)
 
     def move_highways(self):
