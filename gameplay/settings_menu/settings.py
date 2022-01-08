@@ -14,7 +14,7 @@ class Settings:
         self.selected_car = None
         self.selected_highway = None
         self.vehicles = pygame.sprite.Group()
-        self.NPC_v = 10
+        self.NPC_v = 5
         self.scroll = pygame.sprite.Group()
 
         # Private

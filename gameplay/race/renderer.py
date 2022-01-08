@@ -50,13 +50,14 @@ class Renderer:
     def render_background(self):
         settings.scroll.draw(self.screen)
         # print(len(settings.scroll.sprites()))
-        for s in sorted(settings.scroll.sprites(), key=lambda hw: hw.rect.y):
-            # s.rect.y += settings.selected_car.v
-            if s.rect.y > self.height:
-                s.kill()
-                vh = self.create_highway_texture()
-                prev_y = min([s.rect.y for s in settings.scroll.sprites()])
-                vh.rect.y = prev_y + 2 - settings.selected_highway.get_height(width=self.width)
+        # for s in sorted(settings.scroll.sprites(), key=lambda hw: hw.rect.y):
+        #     s.rect.y += settings.selected_car.v
+        #     if s.rect.y > self.height:
+        #         s.to_be_remove = True
+        while len(settings.scroll) < self.preload_scroll:
+            vh = self.create_highway_texture()
+            prev_y = min([s.rect.y for s in settings.scroll.sprites()])
+            vh.rect.y = prev_y + 2 - settings.selected_highway.get_height(width=self.width)
 
     def render_cars(self):
         settings.vehicles.draw(self.screen)
@@ -118,20 +119,28 @@ class AsyncRenderer:
             sleep(settings.NPC_v / settings.selected_car.v)
 
     def remove_background_cars(self):
+        res = 0
         while True:
+            c = 0
             for car in settings.vehicles:
-                if car.rect.y > self.screen.get_height() * 2:
-                    del car
-            sleep(10)
+                # print(car.rect.y)
+                if car.rect.y > self.screen.get_height():
+                    res += sys.getsizeof(car)
+                    c += 1
+                    car.kill()
+            print(f'Car GC: {c} removed, {len(settings.vehicles.sprites())} left. Lifetime stats: approx. {round(res / 1024 ** 2, 3)}MB cleared.')
+            sleep(1)
 
     def remove_background_scroll(self):
+        res = 0
         while True:
             c = 0
             for hw in settings.scroll:
                 if hw.rect.y > self.screen.get_height():
-                    del hw
+                    res += sys.getsizeof(hw)
                     c += 1
-            # print('Removed:', str(c), 'Remaining:', str(len(settings.scroll)))
+                    hw.kill()
+            print(f'Highway GC: {c} removed, {len(settings.scroll.sprites())} left. Lifetime stats: approx. {round(res / 1024 ** 2, 3)}MB cleared.')
             sleep(.1)
 
     def fill_scroll(self):

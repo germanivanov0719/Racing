@@ -47,6 +47,7 @@ class Highway(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.lanes_per_direction = lanes_per_direction
         self.two_directions = two_directions
+        self.to_be_removed = False
         # self.x, self.y = 0, 0
 
     def get_texture(self, scale=1, width=None, height=None):
