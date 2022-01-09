@@ -48,7 +48,6 @@ class CarMenu:
         self.curr = font.render('$' + str(c.get()), True, pygame.Color("green"))
         self.curr_x = self.curr.get_width()
         self.curr_y = self.curr.get_height()
-
         # Creating Vehicles
         self.vehicles = resources.Vehicles.Vehicle.create_all_vehicles()
         self.selected = selected
@@ -140,7 +139,7 @@ class CarMenu:
             # Specifications and upgrades:
             offset_left = .5 * self.rect_width
             # Specification names:
-            base_h = int(self.center_img_vertically(self.vertical_padding, self.scroll_height // 2, img_1.get_height(self.edge_scale)) + img_1.get_height(self.edge_scale)) + self.margin * 3
+            base_h = int(self.center_img_vertically(self.vertical_padding, self.scroll_height // 2, img_2.get_height(self.edge_scale)) + img_2.get_height(self.edge_scale)) + self.margin * 3
             screen.blit(self.speed, ((screen.get_width() - self.separator) // 2 - self.acceleration_x - offset_left, base_h))
             screen.blit(self.brakes, ((screen.get_width() - self.separator) // 2 - self.acceleration_x - offset_left, base_h + self.margin + self.speed_y))
             screen.blit(self.acceleration, ((screen.get_width() - self.separator) // 2 - self.acceleration_x - offset_left, base_h + self.margin * 2 + self.brakes_y + self.speed_y))
@@ -170,17 +169,18 @@ class CarMenu:
                              width=2)
 
             # Upgrade buttons
-            c, w = ('green', 2) if img_2.get_multipliers()[0] < 2 else ('black', 0)
-            screen.blit(self.upgrade, ((screen.get_width() + self.separator) // 2 - offset_left + self.rect_width + self.separator, base_h + self.upgrade_margin))
-            pygame.draw.rect(screen, pygame.Color(c), ((screen.get_width() + self.separator) // 2 - offset_left + self.rect_width + self.separator - self.upgrade_margin, base_h, self.upgrade_size + 2 * self.upgrade_margin, self.upgrade_size + 2 * self.upgrade_margin), w)
+            c, w = ('green', 2)
+            if img_2.get_multipliers()[0] < 2:
+                screen.blit(self.upgrade, ((screen.get_width() + self.separator) // 2 - offset_left + self.rect_width + self.separator, base_h + self.upgrade_margin))
+                pygame.draw.rect(screen, pygame.Color(c), ((screen.get_width() + self.separator) // 2 - offset_left + self.rect_width + self.separator - self.upgrade_margin, base_h, self.upgrade_size + 2 * self.upgrade_margin, self.upgrade_size + 2 * self.upgrade_margin), w)
 
-            c, w = ('green', 2) if img_2.get_multipliers()[1] < 2 else ('black', 0)
-            screen.blit(self.upgrade, ((screen.get_width() + self.separator) // 2 - offset_left + self.rect_width + self.separator, base_h + self.margin + self.speed_y + self.upgrade_margin))
-            pygame.draw.rect(screen, pygame.Color(c), ((screen.get_width() + self.separator) // 2 - offset_left + self.rect_width + self.separator - self.upgrade_margin, base_h + self.margin + self.speed_y, self.upgrade_size + 2 * self.upgrade_margin, self.upgrade_size + 2 * self.upgrade_margin), w)
+            if img_2.get_multipliers()[1] < 2:
+                screen.blit(self.upgrade, ((screen.get_width() + self.separator) // 2 - offset_left + self.rect_width + self.separator, base_h + self.margin + self.speed_y + self.upgrade_margin))
+                pygame.draw.rect(screen, pygame.Color(c), ((screen.get_width() + self.separator) // 2 - offset_left + self.rect_width + self.separator - self.upgrade_margin, base_h + self.margin + self.speed_y, self.upgrade_size + 2 * self.upgrade_margin, self.upgrade_size + 2 * self.upgrade_margin), w)
 
-            c, w = ('green', 2) if img_2.get_multipliers()[2] < 2 else ('black', 0)
-            screen.blit(self.upgrade, ((screen.get_width() + self.separator) // 2 - offset_left + self.rect_width + self.separator,  base_h + self.margin * 2 + self.brakes_y + self.speed_y + self.upgrade_margin))
-            pygame.draw.rect(screen, pygame.Color(c), ((screen.get_width() + self.separator) // 2 - offset_left + self.rect_width + self.separator - self.upgrade_margin,  base_h + self.margin * 2 + self.brakes_y + self.speed_y, self.upgrade_size + 2 * self.upgrade_margin, self.upgrade_size + 2 * self.upgrade_margin), w)
+            if img_2.get_multipliers()[2] < 2:
+                screen.blit(self.upgrade, ((screen.get_width() + self.separator) // 2 - offset_left + self.rect_width + self.separator,  base_h + self.margin * 2 + self.brakes_y + self.speed_y + self.upgrade_margin))
+                pygame.draw.rect(screen, pygame.Color(c), ((screen.get_width() + self.separator) // 2 - offset_left + self.rect_width + self.separator - self.upgrade_margin,  base_h + self.margin * 2 + self.brakes_y + self.speed_y, self.upgrade_size + 2 * self.upgrade_margin, self.upgrade_size + 2 * self.upgrade_margin), w)
 
             # Next button
             screen.blit(self.next, (screen.get_width() - self.next_x - self.margin,

@@ -34,7 +34,7 @@ class Renderer:
         self.height = self.screen.get_height()
         self.prepare_car(settings.selected_car)
         self.prepare_highway(settings.selected_highway)
-        settings.selected_car.rect.y = int(self.height * .8 - settings.selected_car.rect[3])
+        settings.selected_car.rect.y = int(self.height * .8 - settings.selected_car.rect.h)
         settings.selected_car.rect.x = self.width // 2 - settings.selected_car.rect.x // 2
         settings.vehicles = pygame.sprite.Group(settings.selected_car)
 
@@ -49,11 +49,6 @@ class Renderer:
 
     def render_background(self):
         settings.scroll.draw(self.screen)
-        # print(len(settings.scroll.sprites()))
-        # for s in sorted(settings.scroll.sprites(), key=lambda hw: hw.rect.y):
-        #     s.rect.y += settings.selected_car.v
-        #     if s.rect.y > self.height:
-        #         s.to_be_remove = True
         while len(settings.scroll) < self.preload_scroll:
             vh = self.create_highway_texture()
             prev_y = min([s.rect.y for s in settings.scroll.sprites()])
@@ -86,6 +81,7 @@ class AsyncRenderer:
         self.daemons = []
         self.last_car = None
         self.r = Renderer(screen)
+        self.distance = 0
         # self.car_remove_distance = /
 
     def generate(self):
@@ -105,7 +101,7 @@ class AsyncRenderer:
 
     def generate_new_cars(self):
         while True:
-            if self.last_car is None or self.last_car.rect.y > self.screen.get_height():
+            if self.last_car is None or self.last_car.rect.y > self.screen.get_height() // 5:
                 num = random.randint(0, settings.selected_highway.get_total_lanes() - 1)
                 vhs = []
                 for c in resources.Vehicles.Vehicle.create_all_vehicles(False):
@@ -129,7 +125,7 @@ class AsyncRenderer:
                     res += sys.getsizeof(car)
                     c += 1
                     car.kill()
-            print(f'Car GC: {c} removed, {len(settings.vehicles.sprites())} left. Lifetime stats: approx. {round(res / 1024 ** 2, 3)}MB cleared.')
+            # print(f'Car GC: {c} removed, {len(settings.vehicles.sprites())} left. Lifetime stats: approx. {round(res / 1024 ** 2, 3)}MB cleared.')
             sleep(1)
 
     def remove_background_scroll(self):
@@ -141,7 +137,7 @@ class AsyncRenderer:
                     res += sys.getsizeof(hw)
                     c += 1
                     hw.kill()
-            print(f'Highway GC: {c} removed, {len(settings.scroll.sprites())} left. Lifetime stats: approx. {round(res / 1024 ** 2, 3)}MB cleared.')
+            # print(f'Highway GC: {c} removed, {len(settings.scroll.sprites())} left. Lifetime stats: approx. {round(res / 1024 ** 2, 3)}MB cleared.')
             sleep(.1)
 
     def fill_scroll(self):
