@@ -15,13 +15,8 @@ def create_all_highways():
     lanes_per_direction = [item[0] for item in cur.execute('SELECT lanes_per_direction from highway_table').fetchall()]
     two_directions = [item[0] for item in cur.execute('SELECT two_directions from highway_table').fetchall()]
 
-    # textures = [resources.Highways.Textures.TEXTURES.ASPHALT_1,
-    #             resources.Highways.Textures.TEXTURES.SNOW_1,
-    #             resources.Highways.Textures.TEXTURES.DIRT_1]
-
     highways = []
     for highway in range(len(textures)):
-        print(names[highway])
         highways.append(resources.Highways.Highway.Highway(names[highway], textures[highway], lanes_per_direction[highway], two_directions[highway]))
 
     # for t in textures:

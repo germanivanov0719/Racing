@@ -19,6 +19,7 @@ from main import VERSION
 def generate_not_enough_money_error(cost=0):
     app = QApplication(sys.argv)
     w = QMessageBox()
+    w.setIcon(QMessageBox.Critical)
     w.setWindowTitle('Error')
     w.setText(f'You do not have enough money. \nThis item/upgrade costs ${str(cost)}.')
     w.exec()
