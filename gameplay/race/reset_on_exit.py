@@ -11,3 +11,4 @@ def reset() -> None:
     for car_obj in cars:
         if settings.selected_car.name == car_obj.name:
             settings.selected_car = car_obj
+

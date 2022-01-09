@@ -29,6 +29,9 @@ def create_all_vehicles(initialize=True):
     vehicles = []
     for car in range(len(names)):
         vehicles.append(resources.Vehicles.Vehicle.Vehicle(names[car], textures[car], speed[car], brakes[car], acceleration[car], (speed_multipliers[car], brakes_multipliers[car], acceleration_multipliers[car]), initialize=initialize))
+    # Make cars look same
+    for car in vehicles:
+        car.set_texture(car.get_texture(width=30))
     return vehicles
 
     # for t in textures:

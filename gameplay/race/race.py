@@ -38,6 +38,8 @@ class Race:
         # Create renderer instance
         self.r = None
         self.ar = None
+        # Count distance
+        self.distance = 0
 
     def render(self, screen):
         # Initialize renderer and async renderer
@@ -70,19 +72,22 @@ class Race:
         if pygame.sprite.spritecollide(settings.selected_car, settings.vehicles, False) != [settings.selected_car]:
             settings.selected_car.kill()
 
+        self.distance += settings.selected_car.v
+        print(self.distance)
+
     def key_handler(self, screen, keys):
         # Use something like "if keys[pygame.K_w]:" to handle different keys.
         # Please, respect user preference, which is stored in "settings.CONTROLS"
         # and can be either 'WASD' or 'Arrows'.
         arrows_on = settings.CONTROLS == 'Arrows'
         if arrows_on and keys[pygame.K_RIGHT] or not arrows_on and keys[pygame.K_d]:
-            settings.selected_car.rect.x += 9
+            settings.selected_car.rect.x += 6 // (settings.FPS / 60)
         if arrows_on and keys[pygame.K_LEFT] or not arrows_on and keys[pygame.K_a]:
-            settings.selected_car.rect.x -= 9
+            settings.selected_car.rect.x -= 6 // (settings.FPS / 60)
         if arrows_on and keys[pygame.K_UP] or not arrows_on and keys[pygame.K_w]:
-            settings.selected_car.v += 1
+            settings.selected_car.v += 1 // (settings.FPS / 60)
         if arrows_on and keys[pygame.K_DOWN] or not arrows_on and keys[pygame.K_s]:
-            settings.selected_car.v -= 1
+            settings.selected_car.v -= 1 // (settings.FPS / 60)
             if settings.selected_car.v < settings.NPC_v + 2:
                 settings.selected_car.v = settings.NPC_v + 2
 
