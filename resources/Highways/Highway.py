@@ -20,8 +20,9 @@ def create_all_highways():
     #             resources.Highways.Textures.TEXTURES.DIRT_1]
 
     highways = []
-    for car in range(len(textures)):
-        highways.append(resources.Highways.Highway.Highway(names[car], textures[car], lanes_per_direction[car], two_directions[car]))
+    for highway in range(len(textures)):
+        print(names[highway])
+        highways.append(resources.Highways.Highway.Highway(names[highway], textures[highway], lanes_per_direction[highway], two_directions[highway]))
 
     # for t in textures:
     #     highways.append(resources.Highways.Highway.Highway(textures.index(t), t, 1, 1))
