@@ -20,12 +20,6 @@ def create_all_vehicles(initialize=True):
     acceleration_multipliers = [item[0] for item in cur.execute('SELECT acceleration_multiplier from vehicle_table').fetchall()]
     cur.close()
 
-    # textures = [resources.Vehicles.Textures.TEXTURES.BUS_1,
-    #             resources.Vehicles.Textures.TEXTURES.BUS_2,
-    #             resources.Vehicles.Textures.TEXTURES.BUS_3,
-    #             resources.Vehicles.Textures.TEXTURES.BUS_4,
-    #             resources.Vehicles.Textures.TEXTURES.BUS_5]
-
     vehicles = []
     for car in range(len(names)):
         vehicles.append(resources.Vehicles.Vehicle.Vehicle(names[car], textures[car], speed[car], brakes[car], acceleration[car], (speed_multipliers[car], brakes_multipliers[car], acceleration_multipliers[car]), initialize=initialize))
