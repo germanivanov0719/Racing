@@ -29,37 +29,59 @@ from resources.fonts.FONTS import ORBITRON_REGULAR, ORBITRON_MEDIUM, ORBITRON_EX
 
 class Renderer:
     def __init__(self, screen):
+        # Initializing, setting general variables
         self.screen = screen
         self.width = self.screen.get_width()
         self.height = self.screen.get_height()
+
+        # Setting up highways, and drawing the first one
+        self.max_lane_width = 100
+
+        settings.scroll = pygame.sprite.Group(settings.selected_highway)
+        hw = settings.selected_highway
+        self.padding = 0
+        if hw.get_total_lanes() * self.max_lane_width * settings.MSF < self.width:
+            width = hw.get_total_lanes() * self.max_lane_width * settings.MSF
+            self.padding = (self.width - width) // 2
+            hw.set_texture(hw.get_texture(width=width))
+        else:
+            hw.set_texture(hw.get_texture(width=self.width))
+        hw.rect.x = self.padding
+        hw.rect.y = self.height - hw.get_height()
+
+        # Setting up the player's car
         self.prepare_car(settings.selected_car)
-        self.prepare_highway(settings.selected_highway)
         settings.selected_car.rect.y = int(self.height * .8 - settings.selected_car.rect.h)
         settings.selected_car.rect.x = self.width // 2 - settings.selected_car.rect.x // 2
         settings.vehicles = pygame.sprite.Group(settings.selected_car)
 
-        settings.scroll = pygame.sprite.Group(settings.selected_highway)
-
-        self.preload_scroll = round(20 * settings.get_scaling())
-        for _ in range(self.preload_scroll):
-            self.create_highway_texture()
-        for i in range(len(settings.scroll) - 2):
-            settings.scroll.sprites()[i].rect.y = -settings.selected_highway.get_height(width=self.width) * (len(settings.scroll.sprites()) - 2 - i)
-        settings.scroll.sprites()[-1].rect.y = settings.selected_highway.get_height(width=self.width)
+        # Render highways further
+        self.preload_scroll = round(50 * settings.get_scaling())
+        self.render_background()
 
     def render_background(self):
         settings.scroll.draw(self.screen)
+        print(settings.selected_car.v)
         while len(settings.scroll) < self.preload_scroll:
+            if len(settings.scroll) == 0:
+                prev_y = 0
+            else:
+                prev_y = min([s.rect.y for s in settings.scroll.sprites()])
             vh = self.create_highway_texture()
-            prev_y = min([s.rect.y for s in settings.scroll.sprites()])
-            vh.rect.y = prev_y + 2 - settings.selected_highway.get_height(width=self.width)
+            if self.screen.get_width() > vh.get_total_lanes() * self.max_lane_width * settings.MSF:
+                # width = vh.get_total_lanes() * self.max_lane_width * settings.get_scaling()
+                vh.set_texture(vh.get_texture(width=self.width - self.padding * 2))
+                vh.rect.y = prev_y - settings.selected_highway.get_height()
+                vh.rect.x = self.padding
+            else:
+                vh.rect.y = prev_y - settings.selected_highway.get_height(width=self.screen.get_width())
 
     def render_cars(self):
         settings.vehicles.draw(self.screen)
 
     def prepare_car(self, car: resources.Vehicles.Vehicle.Vehicle):
-        w = self.width / settings.selected_highway.get_total_lanes() * 0.6
-        car.set_texture(car.get_texture(width=w))
+        w = (self.width - self.padding * 2) / settings.selected_highway.get_total_lanes() * 0.6
+        car.set_texture(car.get_texture(width=int(w)))
 
     def prepare_highway(self, highway: resources.Highways.Highway.Highway):
         highway.set_texture(highway.get_texture(width=self.width))
@@ -101,7 +123,7 @@ class AsyncRenderer:
 
     def generate_new_cars(self):
         while True:
-            if self.last_car is None or self.last_car.rect.y > self.screen.get_height() // 5:
+            if self.last_car is None or self.last_car.rect.y > self.screen.get_height():
                 num = random.randint(0, settings.selected_highway.get_total_lanes() - 1)
                 vhs = []
                 for c in resources.Vehicles.Vehicle.create_all_vehicles(False):
@@ -110,7 +132,8 @@ class AsyncRenderer:
                 vh = random.choice(vhs)
                 self.r.prepare_car(vh)
                 vh.rect.y = -200
-                vh.set_lane(num, width=self.screen.get_width())
+                vh.set_lane(num, width=settings.selected_highway.get_width())
+                vh.rect.x += settings.selected_highway.rect.x
                 vh.do_render()
                 self.last_car = vh
             sleep(settings.NPC_v / settings.selected_car.v)

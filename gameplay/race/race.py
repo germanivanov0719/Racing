@@ -24,6 +24,7 @@ from resources.fonts.FONTS import ORBITRON_REGULAR, ORBITRON_MEDIUM, ORBITRON_EX
 
 class Race:
     def __init__(self, heading_y=20):
+        settings.update_scaling()
         scaling = settings.get_scaling()
         # 1. Menu
         font = pygame.font.Font(ORBITRON_REGULAR, int(20 * scaling))
@@ -73,7 +74,7 @@ class Race:
             settings.selected_car.kill()
 
         self.distance += settings.selected_car.v
-        print(self.distance)
+        # print(self.distance)
 
     def key_handler(self, screen, keys):
         # Use something like "if keys[pygame.K_w]:" to handle different keys.
@@ -86,6 +87,8 @@ class Race:
             settings.selected_car.rect.x -= 6 // (settings.FPS / 60)
         if arrows_on and keys[pygame.K_UP] or not arrows_on and keys[pygame.K_w]:
             settings.selected_car.v += 1 // (settings.FPS / 60)
+            if settings.selected_car.v > 600:
+                settings.selected_car.v = 600
         if arrows_on and keys[pygame.K_DOWN] or not arrows_on and keys[pygame.K_s]:
             settings.selected_car.v -= 1 // (settings.FPS / 60)
             if settings.selected_car.v < settings.NPC_v + 2:

@@ -3,7 +3,7 @@ import pygame
 import PyQt5
 
 # System constants
-VERSION = '0.6.5'
+VERSION = '0.6.6'
 
 # Other libs imports
 # EMPTY
@@ -67,6 +67,7 @@ if __name__ == '__main__':
 
                 # Some magical calculations to make the screen look as beautiful as possible
                 settings.RSF = abs(sorted([w / width - 1, h / height - 1])[0] + 1)
+                settings.MSF = abs(sorted([w / width - 1, h / height - 1])[1] + 1)
                 # Applying scaling
                 settings.update_scaling()
                 del w, h

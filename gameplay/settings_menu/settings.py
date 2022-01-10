@@ -9,6 +9,7 @@ class Settings:
         self.CONTROLS = 'WASD'
         self.GSF = 1  # Global scaling factor, set by the user settings
         self.RSF = 1  # Resize (Real) scaling factor, calculated when the window is resized
+        self.MSF = 1  # Minimal Scaling factor, calculated when the window is resized, used by Game Engine
 
         # Selected, public
         self.selected_car = None
