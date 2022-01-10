@@ -18,6 +18,8 @@ class Settings:
         self.NPC_v = 5
         self.scroll = pygame.sprite.Group()
 
+        self.level = None
+        
         # self.size = (900, 700)
 
         # Private

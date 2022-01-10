@@ -12,6 +12,7 @@ import resources.Highways.Highway
 import gameplay.race.race
 import resources.currency_operations
 from gameplay.settings_menu.settings import settings
+import gameplay.highway_menu.select_level
 
 # System constants
 from main import VERSION
@@ -136,6 +137,7 @@ class HighwayMenu:
 
         # Play button
         if pos[0] > screen.get_width() - 150 * scaling and pos[1] > screen.get_height() - 150 * scaling:
+            gameplay.highway_menu.select_level.main()
             settings.selected_highway = self.highways[self.selected % len(self.highways)]
             return gameplay.race.race.Race(heading_y=self.heading_y)
 
