@@ -80,19 +80,20 @@ class Race:
         # Use something like "if keys[pygame.K_w]:" to handle different keys.
         # Please, respect user preference, which is stored in "settings.CONTROLS"
         # and can be either 'WASD' or 'Arrows'.
+        car = settings.selected_car
         arrows_on = settings.CONTROLS == 'Arrows'
         if arrows_on and keys[pygame.K_RIGHT] or not arrows_on and keys[pygame.K_d]:
-            settings.selected_car.rect.x += 6 // (settings.FPS / 60)
+            car.rect.x += 6 // (settings.FPS / 60)
         if arrows_on and keys[pygame.K_LEFT] or not arrows_on and keys[pygame.K_a]:
-            settings.selected_car.rect.x -= 6 // (settings.FPS / 60)
+            car.rect.x -= 6 // (settings.FPS / 60)
         if arrows_on and keys[pygame.K_UP] or not arrows_on and keys[pygame.K_w]:
-            settings.selected_car.v += 1 // (settings.FPS / 60)
-            if settings.selected_car.v > 600:
-                settings.selected_car.v = 600
+            car.v += car.get_acceleration() // (settings.FPS / 60)
+            if settings.selected_car.v > settings.selected_car.speed:
+                settings.selected_car.v = settings.selected_car.speed
         if arrows_on and keys[pygame.K_DOWN] or not arrows_on and keys[pygame.K_s]:
-            settings.selected_car.v -= 1 // (settings.FPS / 60)
-            if settings.selected_car.v < settings.NPC_v + 2:
-                settings.selected_car.v = settings.NPC_v + 2
+            car.v -= car.get_brakes() // (settings.FPS / 60)
+            if car.v < settings.NPC_v + 2:
+                car.v = settings.NPC_v + 2
 
     def click_handler(self, pos, screen):
         # Menu button

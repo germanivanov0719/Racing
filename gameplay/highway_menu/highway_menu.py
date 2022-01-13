@@ -147,7 +147,6 @@ class HighwayMenu:
         img_1 = self.highways[(self.selected - 1) % len(self.highways)]
         img_2 = self.highways[self.selected % len(self.highways)]
         img_3 = self.highways[(self.selected + 1) % len(self.highways)]
-        # if pos[0] < (screen.get_width() - 150 * scaling) // 2 and pos[1] in range(self.vertical_padding, self.vertical_padding + self.scroll_height):
         if pos[0] < (screen.get_width() - 350 * scaling) // 2 and pos[1] in range(
                 int(self.center_img_vertically(self.vertical_padding, self.scroll_height // 2,
                                                img_1.get_height(self.edge_scale))),

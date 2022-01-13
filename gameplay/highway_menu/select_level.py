@@ -1,8 +1,11 @@
 import sys
+
+import pygame.event
 from PyQt5 import uic, QtCore, QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow
 
 from gameplay.settings_menu.settings import settings
+
 
 class LevelMenu(QMainWindow):
     def __init__(self):
@@ -10,16 +13,21 @@ class LevelMenu(QMainWindow):
         uic.loadUi('gameplay/highway_menu/select_level_menu.ui', self)
         self.pushButton.clicked.connect(self.apply)
 
+        # Remove the frame to prevent closing the dialog
+        self.setWindowFlags(self.windowFlags() and QtCore.Qt.CustomizeWindowHint)
+        # self.setWindowFlags(self.windowFlags() and QtCore.Qt.FramelessWindowHint)
+
     def apply(self):
         level_sel = self.buttonGroup.checkedButton().text()
-        print(level_sel)
+        # print(level_sel)
         if level_sel == 'EASY':
             settings.level = 1
         elif level_sel == 'NORMAL':
-            settings.level = 1
+            settings.level = 2
         else:
-            settings.level = 1
+            settings.level = 3
         self.close()
+
 
 def except_hook(cls, exception, traceback):
     sys.__excepthook__(cls, exception, traceback)
@@ -38,6 +46,7 @@ def main():
     app.exec_()
     del app
     del ex
+    pygame.event.clear()
 
 
 if __name__ == '__main__':

@@ -56,39 +56,46 @@ class Renderer:
         settings.vehicles = pygame.sprite.Group(settings.selected_car)
 
         # Render highways further
-        self.preload_scroll = round(50 * settings.get_scaling())
+        self.preload_scroll = min(self.calc_textures_required() * settings.selected_car.get_speed(), 400)
+        # print(self.preload_scroll)
         self.render_background()
 
     def render_background(self):
         settings.scroll.draw(self.screen)
-        print(settings.selected_car.v)
         while len(settings.scroll) < self.preload_scroll:
             if len(settings.scroll) == 0:
-                prev_y = 0
+                print('Reset occurred. Consider slowing down.')
+                prev_y = self.height - settings.selected_highway.get_height()
             else:
                 prev_y = min([s.rect.y for s in settings.scroll.sprites()])
             vh = self.create_highway_texture()
             if self.screen.get_width() > vh.get_total_lanes() * self.max_lane_width * settings.MSF:
-                # width = vh.get_total_lanes() * self.max_lane_width * settings.get_scaling()
                 vh.set_texture(vh.get_texture(width=self.width - self.padding * 2))
-                vh.rect.y = prev_y - settings.selected_highway.get_height()
-                vh.rect.x = self.padding
-            else:
-                vh.rect.y = prev_y - settings.selected_highway.get_height(width=self.screen.get_width())
+            vh.rect.x = self.padding
+            vh.rect.y = prev_y - settings.selected_highway.get_height()
+        # print('Speed:', settings.selected_car.v, f'(about {(17.5/1600)*settings.selected_car.v*60*60/100000} kmph)')
+        # print(len(settings.scroll))
 
     def render_cars(self):
         settings.vehicles.draw(self.screen)
 
     def prepare_car(self, car: resources.Vehicles.Vehicle.Vehicle):
         w = (self.width - self.padding * 2) / settings.selected_highway.get_total_lanes() * 0.6
-        car.set_texture(car.get_texture(width=int(w)))
+        car.set_texture(car.get_texture(width=w))
 
     def prepare_highway(self, highway: resources.Highways.Highway.Highway):
         highway.set_texture(highway.get_texture(width=self.width))
 
     def calc_textures_required(self):
         h = settings.selected_highway.get_texture(width=self.width).get_rect()[3]
-        return self.height // h + 5
+        if self.height // h < 10:
+            return (self.height // h + 1) * 10
+        elif self.height // h < 30:
+            return (self.height // h + 1) * 5
+        elif self.height // h < 50:
+            return (self.height // h + 1) * 3
+        else:
+            return (self.height // h + 1) * 2
 
     def create_highway_texture(self):
         hw = settings.selected_highway
@@ -109,6 +116,8 @@ class AsyncRenderer:
     def generate(self):
         threading.Thread(target=self.move_traffic, daemon=True).start()
         threading.Thread(target=self.move_highways, daemon=True).start()
+        # threading.Thread(target=self.fill_scroll_new, daemon=True).start()
+        threading.Thread(target=self.remove_background_scroll, daemon=True).start()
 
     def create_daemons(self):
         self.daemons.append(threading.Thread(target=self.generate_new_cars, daemon=True).start())
@@ -123,7 +132,7 @@ class AsyncRenderer:
 
     def generate_new_cars(self):
         while True:
-            if self.last_car is None or self.last_car.rect.y > self.screen.get_height():
+            if self.last_car is None or self.last_car.rect.y > self.screen.get_height() / settings.level:
                 num = random.randint(0, settings.selected_highway.get_total_lanes() - 1)
                 vhs = []
                 for c in resources.Vehicles.Vehicle.create_all_vehicles(False):
@@ -153,26 +162,31 @@ class AsyncRenderer:
 
     def remove_background_scroll(self):
         res = 0
-        while True:
-            c = 0
-            for hw in settings.scroll:
-                if hw.rect.y > self.screen.get_height():
-                    res += sys.getsizeof(hw)
-                    c += 1
-                    hw.kill()
+        # while True:
+        c = 0
+        for hw in settings.scroll:
+            if hw.rect.y > self.screen.get_height():
+                res += sys.getsizeof(hw)
+                c += 1
+                hw.kill()
             # print(f'Highway GC: {c} removed, {len(settings.scroll.sprites())} left. Lifetime stats: approx. {round(res / 1024 ** 2, 3)}MB cleared.')
-            sleep(.1)
+            # sleep(.1)
 
+    # Deprecated, do NOT use
     def fill_scroll(self):
         while True:
             if len(settings.scroll) < 100:
                 hw = self.r.create_highway_texture()
                 hw.y = settings.scroll[0].y - hw.rect.h
                 settings.scroll.insert(0, hw)
-            print(settings.scroll[0].y)
-            print('Count:', len(settings.scroll))
+            # print(settings.scroll[0].y)
+            # print('Count:', len(settings.scroll))
             sleep(.1)
 
     def move_highways(self):
+        if len(settings.scroll.sprites()) <= 2:
+            print('critically few HW')
+            return 0
         for s in settings.scroll.sprites():
             s.rect.y += settings.selected_car.v
+

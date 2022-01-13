@@ -120,3 +120,12 @@ class Vehicle(pygame.sprite.Sprite):
     def set_texture(self, img):
         self.image = img
         self.rect = img.get_rect()
+
+    def get_speed(self):
+        return self.speed * self.speed_multiplier
+
+    def get_acceleration(self):
+        return self.acceleration * self.acceleration_multiplier
+
+    def get_brakes(self):
+        return self.brakes * self.brakes_multiplier
