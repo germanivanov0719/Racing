@@ -12,6 +12,7 @@ import gameplay.start_menu.start_menu
 import gameplay.highway_menu.highway_menu
 from gameplay.settings_menu.settings import settings
 import gameplay.race.renderer
+import resources.currency_operations
 from gameplay.race.reset_on_exit import reset
 import resources.Highways.Highway
 
@@ -101,8 +102,16 @@ class Race:
                 range(self.margin + self.heading_y // 2 - self.menu_y // 2 - 5,
                       self.margin + self.heading_y // 2 - self.menu_y // 2 - 5 + self.menu_y + 10)]
         if pos[0] in rect[0] and pos[1] in rect[1]:
+            # Make screen resizable again
             screen = pygame.display.set_mode((screen.get_width(), screen.get_height()), pygame.RESIZABLE,
                                              vsync=settings.VSYNC)
+            # Give the player money for the ride
+            # Level multipliers: 100, 125, 150%
+            m = self.distance / 2500 * (1 + (settings.level - 1) * .25)
+            # TODO: Call a Qt dialog later
+            co = resources.currency_operations.CurrencyOperations()
+            co.add(int(m))
+
             reset()  # Call to reinitialize all objects
             return gameplay.highway_menu.highway_menu.HighwayMenu()
 

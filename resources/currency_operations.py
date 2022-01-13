@@ -24,7 +24,7 @@ class CurrencyOperations:
             print('Error opening currency.dat')  # Replace with Qt dialog later
             del self
 
-    def add(self, m):
+    def add(self, m: int):
         self.count += m
         self.write()
 
