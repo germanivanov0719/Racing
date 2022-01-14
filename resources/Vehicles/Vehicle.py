@@ -8,28 +8,19 @@ from gameplay.settings_menu.settings import settings
 
 
 def create_all_vehicles(initialize=True):
+    vehicles = []
+    # Connect to the DB
     con = sqlite3.connect('resources/Vehicles/vehicles_table.db')
     cur = con.cursor()
-    names = [item[0] for item in cur.execute('SELECT name from vehicle_table').fetchall()]
-    textures = [item[0] for item in cur.execute('SELECT img from vehicle_table').fetchall()]
-    speed = [item[0] for item in cur.execute('SELECT speed from vehicle_table').fetchall()]
-    brakes = [item[0] for item in cur.execute('SELECT brakes from vehicle_table').fetchall()]
-    acceleration = [item[0] for item in cur.execute('SELECT acceleration from vehicle_table').fetchall()]
-    speed_multipliers = [item[0] for item in cur.execute('SELECT speed_multiplier from vehicle_table').fetchall()]
-    brakes_multipliers = [item[0] for item in cur.execute('SELECT brakes_multiplier from vehicle_table').fetchall()]
-    acceleration_multipliers = [item[0] for item in cur.execute('SELECT acceleration_multiplier from vehicle_table').fetchall()]
+    data = cur.execute('SELECT * from vehicle_table').fetchall()
     cur.close()
+    # Create vehicles
+    for car in data:
+        # print(*car[0:5], (car[5], car[6], car[7]))
+        vehicles.append(resources.Vehicles.Vehicle.Vehicle(*car[0:5], (car[5], car[6], car[7]), initialize=initialize))
+        vehicles[-1].set_texture(vehicles[-1].get_texture(width=30))  # Make all cars have same width
 
-    vehicles = []
-    for car in range(len(names)):
-        vehicles.append(resources.Vehicles.Vehicle.Vehicle(names[car], textures[car], speed[car], brakes[car], acceleration[car], (speed_multipliers[car], brakes_multipliers[car], acceleration_multipliers[car]), initialize=initialize))
-    # Make cars look same
-    for car in vehicles:
-        car.set_texture(car.get_texture(width=30))
     return vehicles
-
-    # for t in textures:
-    #     vehicles.append(resources.Vehicles.Vehicle.Vehicle(textures.index(t), t, 1, 1, 1))
 
 
 # CREATE TABLE "vehicle_table" (
@@ -77,7 +68,7 @@ class Vehicle(pygame.sprite.Sprite):
             scale = height / self.image.get_rect()[3]
         if width is not None and height is not None:
             return pygame.transform.scale(self.image, (width, height))
-        return pygame.transform.scale(self.image, (self.rect[2] * scale // 1, self.rect[3] * scale // 1))
+        return pygame.transform.scale(self.image, (self.rect[2] * scale, self.rect[3] * scale))
 
     def get_width(self, scale=1):
         return self.rect[2] * scale // 1

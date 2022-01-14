@@ -7,20 +7,13 @@ from gameplay.settings_menu.settings import settings
 
 
 def create_all_highways():
+    highways = []
     # Change to get from DB
     con = sqlite3.connect('resources/Highways/highways_table.db')
     cur = con.cursor()
-    names = [item[0] for item in cur.execute('SELECT name from highway_table').fetchall()]
-    textures = [item[0] for item in cur.execute('SELECT img from highway_table').fetchall()]
-    lanes_per_direction = [item[0] for item in cur.execute('SELECT lanes_per_direction from highway_table').fetchall()]
-    two_directions = [item[0] for item in cur.execute('SELECT two_directions from highway_table').fetchall()]
-
-    highways = []
-    for highway in range(len(textures)):
-        highways.append(resources.Highways.Highway.Highway(names[highway], textures[highway], lanes_per_direction[highway], two_directions[highway]))
-
-    # for t in textures:
-    #     highways.append(resources.Highways.Highway.Highway(textures.index(t), t, 1, 1))
+    hw = cur.execute('SELECT * from highway_table').fetchall()
+    for highway in hw:
+        highways.append(resources.Highways.Highway.Highway(*highway[0:4]))
     return highways
 
 # CREATE TABLE "highway_table" (

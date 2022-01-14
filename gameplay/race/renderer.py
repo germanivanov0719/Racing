@@ -153,10 +153,13 @@ class AsyncRenderer:
             c = 0
             for car in settings.vehicles:
                 # print(car.rect.y)
-                if car.rect.y > self.screen.get_height():
-                    res += sys.getsizeof(car)
-                    c += 1
-                    car.kill()
+                try:
+                    if car.rect.y > self.screen.get_height():
+                        res += sys.getsizeof(car)
+                        c += 1
+                        car.kill()
+                except AttributeError:
+                    pass
             # print(f'Car GC: {c} removed, {len(settings.vehicles.sprites())} left. Lifetime stats: approx. {round(res / 1024 ** 2, 3)}MB cleared.')
             sleep(1)
 
