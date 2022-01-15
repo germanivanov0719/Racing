@@ -37,7 +37,10 @@ def create_all_vehicles(initialize=True):
 
 
 class Vehicle(pygame.sprite.Sprite):
-    def __init__(self, name, img, speed, brakes, acceleration, multipliers=(1, 1, 1), x=0, y=0, initialize=True):
+    def __init__(self, name, img, speed, brakes, acceleration,
+                 multipliers=(1, 1, 1),
+                 x=0, y=0,
+                 initialize=True, reverse=False):
         # To prevent non-initialized object from rendering
         self.render = initialize
 
@@ -51,6 +54,10 @@ class Vehicle(pygame.sprite.Sprite):
         self.speed = speed  # Max speed
         self.brakes = brakes / 3
         self.acceleration = acceleration / 3
+
+        self.reversed = False
+        if reverse:
+            self.revese()
 
         # print('hi', self.speed, self.acceleration, self.brakes)
 
@@ -122,3 +129,7 @@ class Vehicle(pygame.sprite.Sprite):
 
     def get_brakes(self):
         return self.brakes * self.brakes_multiplier
+
+    def reverse(self):
+        self.image = pygame.transform.rotate(self.image, 180)
+        self.reversed = not self.reversed

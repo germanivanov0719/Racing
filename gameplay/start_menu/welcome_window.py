@@ -21,8 +21,8 @@ def generate_welcome():
     w = QMessageBox()
     w.setWindowTitle('Welcome!')
     w.setText(f'New: \n'
+              f'- Add 2-way highways support.\n'
               f'- Minor improvements.\n'
-              f'- Emergency bug fixes.\n'
               f'See detailed changelog on GitHub.'
               f'\n\nVersion: {VERSION}\t\t\t')
     w.exec()

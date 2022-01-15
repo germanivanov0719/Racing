@@ -63,8 +63,9 @@ class Race:
         # Highways
         self.r.render_background()
         self.r.move_highways()
-        # Render player car
+        # Cars
         self.r.render_cars()
+        self.r.move_traffic()
 
         # Render GUI parts (must always be at the top):
         # Menu button

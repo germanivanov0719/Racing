@@ -35,7 +35,7 @@ class Renderer:
         self.height = self.screen.get_height()
 
         # Setting up highways, and drawing the first one
-        self.max_lane_width = 100
+        self.max_lane_width = 70
 
         settings.scroll = pygame.sprite.Group(settings.selected_highway)
         hw = settings.selected_highway
@@ -109,6 +109,15 @@ class Renderer:
         for s in settings.scroll.sprites():
             s.rect.y += settings.selected_car.v
 
+    def move_traffic(self):
+        for sprite in settings.vehicles:
+            if sprite.render and sprite != settings.selected_car:
+                if not sprite.reversed:
+                    sprite.rect.y += settings.selected_car.v - settings.NPC_v
+                else:
+                    sprite.rect.y += settings.selected_car.v + settings.NPC_v
+
+
 
 class AsyncRenderer:
     def __init__(self, screen):
@@ -121,7 +130,7 @@ class AsyncRenderer:
         self.distance = 0
 
     def generate(self):
-        threading.Thread(target=self.move_traffic, daemon=True).start()
+        # threading.Thread(target=self.move_traffic, daemon=True).start()
         # threading.Thread(target=self.move_highways, daemon=True).start()
         # threading.Thread(target=self.fill_scroll_new, daemon=True).start()
         threading.Thread(target=self.remove_background_scroll, daemon=True).start()
@@ -134,15 +143,9 @@ class AsyncRenderer:
         for d in self.daemons:
             d.start()
 
-    def move_traffic(self):
-        for sprite in settings.vehicles:
-            if sprite.render and sprite != settings.selected_car:
-                sprite.rect.y += settings.selected_car.v - settings.NPC_v
-
     def generate_new_cars(self):
         while self.run_daemons:
             if self.last_car is None or self.last_car.rect.y > self.screen.get_height() / settings.level:
-                num = random.randint(0, settings.selected_highway.get_total_lanes() - 1)
                 vhs = []
                 for c in resources.Vehicles.Vehicle.create_all_vehicles(False):
                     if c.name != settings.selected_car.name:
@@ -150,7 +153,12 @@ class AsyncRenderer:
                 vh = random.choice(vhs)
                 self.r.prepare_car(vh)
                 vh.rect.y = -200
+                
+                # Set lane
+                num = random.randint(0, settings.selected_highway.get_total_lanes() - 1)
                 vh.set_lane(num, width=settings.selected_highway.get_width())
+                if settings.selected_highway.two_directions and num < settings.selected_highway.lanes_per_direction:
+                    vh.reverse()
                 vh.rect.x += settings.selected_highway.rect.x
                 vh.do_render()
                 self.last_car = vh
