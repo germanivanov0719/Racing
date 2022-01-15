@@ -1,5 +1,6 @@
 # Main libs imports
 import threading
+import time
 
 import pygame
 
@@ -59,11 +60,13 @@ class Race:
         self.ar.generate()
 
         # Game engine:
+        # Highways
         self.r.render_background()
+        self.r.move_highways()
         # Render player car
         self.r.render_cars()
 
-        # Render GUI parts (must always be on top):
+        # Render GUI parts (must always be at the top):
         # Menu button
         screen.blit(self.menu, (self.margin, self.margin + self.heading_y // 2 - self.menu_y // 2))
         pygame.draw.rect(screen, pygame.Color('green'),
@@ -84,15 +87,15 @@ class Race:
         car = settings.selected_car
         arrows_on = settings.CONTROLS == 'Arrows'
         if arrows_on and keys[pygame.K_RIGHT] or not arrows_on and keys[pygame.K_d]:
-            car.rect.x += 6 // (settings.FPS / 60)
+            car.rect.x += 6 / (settings.FPS / 60)
         if arrows_on and keys[pygame.K_LEFT] or not arrows_on and keys[pygame.K_a]:
-            car.rect.x -= 6 // (settings.FPS / 60)
+            car.rect.x -= 6 / (settings.FPS / 60)
         if arrows_on and keys[pygame.K_UP] or not arrows_on and keys[pygame.K_w]:
-            car.v += car.get_acceleration() // (settings.FPS / 60)
-            if settings.selected_car.v > settings.selected_car.speed:
-                settings.selected_car.v = settings.selected_car.speed
+            car.v += car.get_acceleration() / (settings.FPS / 60)
+            if settings.selected_car.v > settings.selected_car.get_speed():
+                settings.selected_car.v = settings.selected_car.get_speed()
         if arrows_on and keys[pygame.K_DOWN] or not arrows_on and keys[pygame.K_s]:
-            car.v -= car.get_brakes() // (settings.FPS / 60)
+            car.v -= car.get_brakes() / (settings.FPS / 60)
             if car.v < settings.NPC_v + 2:
                 car.v = settings.NPC_v + 2
 
@@ -111,6 +114,11 @@ class Race:
             # TODO: Call a Qt dialog later
             co = resources.currency_operations.CurrencyOperations()
             co.add(int(m))
+
+            self.ar.stop()
+            del self.r
+            time.sleep(.001)
+            del self.ar
 
             reset()  # Call to reinitialize all objects
             return gameplay.highway_menu.highway_menu.HighwayMenu()

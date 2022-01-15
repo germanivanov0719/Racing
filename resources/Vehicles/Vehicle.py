@@ -49,8 +49,10 @@ class Vehicle(pygame.sprite.Sprite):
         self.name = name
 
         self.speed = speed  # Max speed
-        self.brakes = brakes
-        self.acceleration = acceleration
+        self.brakes = brakes / 3
+        self.acceleration = acceleration / 3
+
+        # print('hi', self.speed, self.acceleration, self.brakes)
 
         self.speed_multiplier = multipliers[0]
         self.brakes_multiplier = multipliers[1]

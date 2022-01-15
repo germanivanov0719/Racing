@@ -56,3 +56,4 @@ gameplay/.DS_Store
 resources/fonts/.DS_Store
 *.swp
 currency.dat
+.vscode/launch.json

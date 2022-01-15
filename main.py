@@ -3,7 +3,7 @@ import pygame
 import PyQt5
 
 # System constants
-VERSION = '0.7'
+VERSION = '0.7.1'
 
 # Other libs imports
 # EMPTY
@@ -43,7 +43,9 @@ if __name__ == '__main__':
         screen.fill((0, 0, 0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                pygame.quit()
                 running = False
+                exit()  # Just to make sure there are no errors
             if event.type == pygame.MOUSEBUTTONUP:
                 if event.button == pygame.BUTTON_LEFT:
                     r = current_position.click_handler(pos=event.pos, screen=screen)
