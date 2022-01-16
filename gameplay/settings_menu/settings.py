@@ -17,6 +17,7 @@ class Settings:
         self.vehicles = pygame.sprite.Group()
         self.NPC_v = 5
         self.scroll = pygame.sprite.Group()
+        self.color = 'Black'
 
         self.level = 1
         
@@ -31,5 +32,13 @@ class Settings:
     def get_scaling(self) -> float:
         return self.__SCALING
 
+    def get_dimmed_color(self) -> tuple:
+        color = list(pygame.Color(self.color))
+        for comp in range(len(color)):
+            if color[comp] - 100 < 0:
+                color[comp] = 0
+            else:
+                color[comp] = color[comp] - 100
+        return tuple(color)
 
 settings = Settings()

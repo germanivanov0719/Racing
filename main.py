@@ -3,7 +3,7 @@ import pygame
 import PyQt5
 
 # System constants
-VERSION = '0.8'
+VERSION = '0.8.1'
 
 # Other libs imports
 # EMPTY
@@ -40,7 +40,7 @@ if __name__ == '__main__':
     current_position = gameplay.start_menu.start_menu.StartMenu()
 
     while running:
-        screen.fill((0, 0, 0))
+        screen.fill(settings.get_dimmed_color())
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 # Make race stop if in game
