@@ -51,7 +51,7 @@ class Vehicle(pygame.sprite.Sprite):
         else:
             pass
         self.image = pygame.image.load(img)
-        self.i = img
+        self.im = Image.open(img)
         self.name = name
 
         self.cost = cost
@@ -86,20 +86,18 @@ class Vehicle(pygame.sprite.Sprite):
             name = name.convert_alpha()
         return name
 
-    def pilImageToSurface(self, pilImage):
-        return self.load_image(pygame.image.fromstring(
-            pilImage.tobytes(), pilImage.size, pilImage.mode).convert())
+    def pil_to_surf(self, pilImage):
+        return self.load_image(pygame.image.fromstring(pilImage.tobytes(), pilImage.size, pilImage.mode).convert())
 
     def get_texture(self, scale=1, width=None, height=None):
-        i = Image.open(self.i)
-        p = self.pilImageToSurface(i)
+        py_img = self.pil_to_surf(self.im)
         if width is not None:
             scale = width / self.image.get_rect()[2]
         if height is not None:
             scale = height / self.image.get_rect()[3]
         if width is not None and height is not None:
-            return pygame.transform.scale(p, (width, height))
-        return pygame.transform.scale(p, (self.rect[2] * scale, self.rect[3] * scale))
+            return pygame.transform.scale(py_img, (width, height))
+        return pygame.transform.scale(py_img, (self.rect[2] * scale, self.rect[3] * scale))
 
     def get_width(self, scale=1):
         return self.rect[2] * scale // 1
