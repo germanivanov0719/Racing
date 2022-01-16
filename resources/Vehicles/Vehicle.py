@@ -17,7 +17,7 @@ def create_all_vehicles(initialize=True):
     # Create vehicles
     for car in data:
         # print(*car[0:5], (car[5], car[6], car[7]))
-        vehicles.append(resources.Vehicles.Vehicle.Vehicle(*car[0:5], (car[5], car[6], car[7]), initialize=initialize))
+        vehicles.append(resources.Vehicles.Vehicle.Vehicle(*car[0:5], (car[5], car[6], car[7]), initialize=initialize, cost=car[8]))
         vehicles[-1].set_texture(vehicles[-1].get_texture(width=30))  # Make all cars have same width
 
     return vehicles
@@ -40,7 +40,8 @@ class Vehicle(pygame.sprite.Sprite):
     def __init__(self, name, img, speed, brakes, acceleration,
                  multipliers=(1, 1, 1),
                  x=0, y=0,
-                 initialize=True, reverse=False):
+                 initialize=True, reverse=False,
+                 cost=None):
         # To prevent non-initialized object from rendering
         self.render = initialize
 
@@ -50,6 +51,8 @@ class Vehicle(pygame.sprite.Sprite):
             pass
         self.image = pygame.image.load(img)
         self.name = name
+
+        self.cost = cost
 
         self.speed = speed  # Max speed
         self.brakes = brakes / 3
@@ -66,6 +69,8 @@ class Vehicle(pygame.sprite.Sprite):
         self.acceleration_multiplier = multipliers[2]
 
         self.v = settings.NPC_v + 2  # Current speed
+
+        self.crashed = False
 
         self.x, self.y = x, y
         self.rect = self.image.get_rect()
@@ -133,3 +138,10 @@ class Vehicle(pygame.sprite.Sprite):
     def reverse(self):
         self.image = pygame.transform.rotate(self.image, 180)
         self.reversed = not self.reversed
+
+    def set_purchased(self):
+        con = sqlite3.connect('resources/Vehicles/vehicles_table.db')
+        cur = con.cursor()
+        cur.execute(f"UPDATE vehicle_table SET cost = NULL WHERE name = '{self.name}'")
+        con.commit()
+        con.close()

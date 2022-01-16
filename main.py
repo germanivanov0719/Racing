@@ -3,7 +3,7 @@ import pygame
 import PyQt5
 
 # System constants
-VERSION = '0.7.2'
+VERSION = '0.8'
 
 # Other libs imports
 # EMPTY
@@ -43,6 +43,10 @@ if __name__ == '__main__':
         screen.fill((0, 0, 0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                # Make race stop if in game
+                if type(current_position) == gameplay.race.race.Race:
+                    current_position = current_position.exit_to_menu(screen)
+                # Quitting...
                 pygame.quit()
                 running = False
                 exit()  # Just to make sure there are no errors
@@ -79,10 +83,16 @@ if __name__ == '__main__':
                 else:
                     current_position.__init__()
 
+        # To handle holded keys in race
         if type(current_position) == gameplay.race.race.Race:
             current_position.key_handler(screen, keys=pygame.key.get_pressed())
 
-        current_position.render(screen)
+        # Render current menu
+        render_code = current_position.render(screen)
+        # Check if it's race and the game is finished
+        if render_code == 'exit_to_menu' and type(current_position) == gameplay.race.race.Race:
+            current_position = current_position.exit_to_menu(screen)
+
         current_frame = (current_frame + 1) % settings.FPS
         pygame.display.flip()
         if settings.PRECISE_FPS:

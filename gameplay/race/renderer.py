@@ -110,13 +110,23 @@ class Renderer:
             s.rect.y += settings.selected_car.v
 
     def move_traffic(self):
-        for sprite in settings.vehicles:
-            if sprite.render and sprite != settings.selected_car:
+        for sprite in settings.vehicles.sprites():
+            if sprite.render and sprite != settings.selected_car and not sprite.crashed:
                 if not sprite.reversed:
                     sprite.rect.y += settings.selected_car.v - settings.NPC_v
                 else:
                     sprite.rect.y += settings.selected_car.v + settings.NPC_v
-
+            elif sprite.render and sprite.crashed:
+                sprite.rect.y += settings.selected_car.v
+        
+    # def darken_crash_animation(self):
+        
+    #     while t < 255:
+            
+    #         # surface.set_alpha(t)
+            
+    #         t += 5
+    #         sleep(.01)
 
 
 class AsyncRenderer:
@@ -125,6 +135,7 @@ class AsyncRenderer:
         self.outputs = {}  # Follow structure {ThreadName: Data, ...}
         self.daemons = []
         self.run_daemons = True
+        self.normal_daemons_count = 0
         self.last_car = None
         self.r = Renderer(screen)
         self.distance = 0
@@ -133,6 +144,7 @@ class AsyncRenderer:
         # threading.Thread(target=self.move_traffic, daemon=True).start()
         # threading.Thread(target=self.move_highways, daemon=True).start()
         # threading.Thread(target=self.fill_scroll_new, daemon=True).start()
+        threading.Thread(target=self.check_daemons, daemon=True).start()
         threading.Thread(target=self.remove_background_scroll, daemon=True).start()
 
     def create_daemons(self):
@@ -140,12 +152,13 @@ class AsyncRenderer:
         self.daemons.append(threading.Thread(target=self.remove_background_cars, daemon=True))
         # self.daemons.append(threading.Thread(target=self.fill_scroll, daemon=True).start())
         self.daemons.append(threading.Thread(target=self.remove_background_scroll, daemon=True))
+        self.normal_daemons_count = len(self.daemons)
         for d in self.daemons:
             d.start()
 
     def generate_new_cars(self):
         while self.run_daemons:
-            if self.last_car is None or self.last_car.rect.y > self.screen.get_height() / settings.level:
+            if self.last_car is None or self.last_car.rect.y > self.screen.get_height() / settings.level: 
                 vhs = []
                 for c in resources.Vehicles.Vehicle.create_all_vehicles(False):
                     if c.name != settings.selected_car.name:
@@ -208,3 +221,9 @@ class AsyncRenderer:
         for d in self.daemons:
             del d
 
+    def check_daemons(self):
+        if len(self.daemons) < self.normal_daemons_count:
+            print('Error in daemon(s) occurred. Restarting...')
+            self.stop
+            sleep(0.001)
+            self.create_daemons()

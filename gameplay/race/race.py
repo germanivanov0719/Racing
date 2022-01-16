@@ -16,6 +16,7 @@ import gameplay.race.renderer
 import resources.currency_operations
 from gameplay.race.reset_on_exit import reset
 import resources.Highways.Highway
+from gameplay.race import final_window
 
 # System constants
 from main import VERSION
@@ -43,6 +44,8 @@ class Race:
         self.ar = None
         # Count distance
         self.distance = 0
+        # Darken animation
+        self.d = 0
 
     def render(self, screen):
         # Initialize renderer and async renderer
@@ -75,10 +78,18 @@ class Race:
                           self.menu_x + 10, self.menu_y + 10), 1)
 
         # Check player collisions
-        if pygame.sprite.spritecollide(settings.selected_car, settings.vehicles, False) != [settings.selected_car]:
-            settings.selected_car.kill()
+        if pygame.sprite.spritecollide(settings.selected_car, settings.vehicles, False) != [settings.selected_car] or self.d != 0:
+            for s in pygame.sprite.spritecollide(settings.selected_car, settings.vehicles, False):
+                s.crashed = True
+            surface = pygame.Surface((screen.get_width(), screen.get_height())).convert_alpha()
+            self.d += 5 * (settings.FPS / 60)
+            surface.fill((0, 0, 0, self.d))
+            screen.blit(surface, (0, 0))
+            if self.d > 240:
+                return 'exit_to_menu'
 
-        self.distance += settings.selected_car.v
+        if not settings.selected_car.crashed:
+            self.distance += settings.selected_car.v
         # print(self.distance)
 
     def key_handler(self, screen, keys):
@@ -86,11 +97,17 @@ class Race:
         # Please, respect user preference, which is stored in "settings.CONTROLS"
         # and can be either 'WASD' or 'Arrows'.
         car = settings.selected_car
+        if car.crashed:
+            return None
         arrows_on = settings.CONTROLS == 'Arrows'
         if arrows_on and keys[pygame.K_RIGHT] or not arrows_on and keys[pygame.K_d]:
             car.rect.x += 6 / (settings.FPS / 60)
+            if car.rect.x > settings.selected_highway.rect.x + settings.selected_highway.rect.w - car.rect.w:
+                car.rect.x = settings.selected_highway.rect.x + settings.selected_highway.rect.w - car.rect.w
         if arrows_on and keys[pygame.K_LEFT] or not arrows_on and keys[pygame.K_a]:
             car.rect.x -= 6 / (settings.FPS / 60)
+            if car.rect.x < settings.selected_highway.rect.x:
+                car.rect.x = settings.selected_highway.rect.x
         if arrows_on and keys[pygame.K_UP] or not arrows_on and keys[pygame.K_w]:
             car.v += car.get_acceleration() / (settings.FPS / 60)
             if settings.selected_car.v > settings.selected_car.get_speed():
@@ -113,15 +130,19 @@ class Race:
             # Level multipliers: 100, 125, 150%
             m = self.distance / 2500 * (1 + (settings.level - 1) * .25)
             # TODO: Call a Qt dialog later
+            crash = pygame.sprite.spritecollide(settings.selected_car, settings.vehicles, False) != [settings.selected_car] or self.d != 0
+            final_window.main(self.distance, settings.level, m, crash=crash)
             co = resources.currency_operations.CurrencyOperations()
             co.add(int(m))
 
+            # Stop and remove renderers and threads
             self.ar.stop()
             del self.r
             time.sleep(.001)
             del self.ar
 
             reset()  # Call to reinitialize all objects
+            pygame.event.clear()
             return gameplay.highway_menu.highway_menu.HighwayMenu()
 
         return self
@@ -130,3 +151,11 @@ class Race:
         return self
         # new_menu = gameplay.start_menu.start_menu.StartMenu()
         # return new_menu
+
+    # Should only be called by main.py and race.py
+    def exit_to_menu(self, screen):
+        # Menu button
+        rect = [range(self.margin - 5, self.margin - 5 + self.menu_x + 10),
+                range(self.margin + self.heading_y // 2 - self.menu_y // 2 - 5,
+                        self.margin + self.heading_y // 2 - self.menu_y // 2 - 5 + self.menu_y + 10)]
+        return self.click_handler([rect[0][1], rect[1][1]], screen)

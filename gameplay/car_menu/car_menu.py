@@ -12,6 +12,7 @@ import resources.Vehicles.Vehicle
 import resources.currency_operations
 from gameplay.settings_menu.settings import settings
 from resources.Error_Dialogs.errors_dialogs import generate_not_enough_money_error
+from gameplay.car_menu.confirm_purchase import confirm_car_purchase 
 
 # System constants
 from main import VERSION
@@ -210,6 +211,17 @@ class CarMenu:
 
         # Next button
         if pos[0] > screen.get_width() - 150 * scaling and pos[1] > screen.get_height() - 150 * scaling:
+            if self.vehicles[self.selected].cost is not None:
+                if confirm_car_purchase(self.vehicles[self.selected].cost):
+                    try:
+                        co = resources.currency_operations.CurrencyOperations()
+                        co.buy(self.vehicles[self.selected].cost)
+                        self.vehicles[self.selected].set_purchased()
+                    except NotEnoughMoneyException:
+                        generate_not_enough_money_error(self.vehicles[self.selected].cost)
+                        return self
+                else:
+                    return self
             new_menu = gameplay.highway_menu.highway_menu.HighwayMenu()
             settings.selected_car = self.vehicles[self.selected % len(self.vehicles)]
             # settings.selected_highway = self.highways[self.selected % len(self.highways)]
@@ -235,6 +247,14 @@ class CarMenu:
                 int(self.center_img_vertically(self.vertical_padding, self.scroll_height // 2,
                                                img_3.get_height(self.edge_scale)) + img_3.get_height(self.edge_scale))):
             self.selected = (self.selected + 1) % len(self.vehicles)
+        if self.vehicles[self.selected].cost is not None:
+            font = pygame.font.Font(ORBITRON_REGULAR, int(30 * scaling))
+            self.next = font.render('Buy', True, pygame.Color("green"))
+        else:
+            font = pygame.font.Font(ORBITRON_REGULAR, int(30 * scaling))
+            self.next = font.render('Next', True, pygame.Color("green"))
+        self.next_x = self.next.get_width()
+        self.next_y = self.next.get_height()
 
         # Upgrade buttons
         offset_left = .5 * (self.rect_width + self.speed_y)

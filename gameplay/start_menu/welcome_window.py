@@ -20,9 +20,13 @@ def generate_welcome():
     app = QApplication(sys.argv)
     w = QMessageBox()
     w.setWindowTitle('Welcome!')
-    w.setText(f'New: \n'
-              f'- Add 2-way highways support.\n'
-              f'- Minor improvements.\n'
-              f'See detailed changelog on GitHub.'
+    w.setText(f'New: \n\n'
+              f'- Window with earnings when game ends.\n'
+              f'- You can now buy cars.\n'
+              f'- Driving outside the highway is no longer possible.\n'
+              f'- Stability improvements.\n'
+              f'- A lot more other changes.\n'
+              f'\nThis should be considered a stable release\n\n'
+              f'See more detailed changelog on GitHub.'
               f'\n\nVersion: {VERSION}\t\t\t')
     w.exec()
