@@ -34,6 +34,13 @@ class SettingsMenu(QMainWindow):
         self.gsf_spin.setValue(float(settings.GSF))
         self.precise_framerate_box.setChecked(settings.PRECISE_FPS)
         self.vsync_box.setChecked(settings.VSYNC)
+        if settings.color == 'Black':
+            self.color_box.setCurrentIndex(0)
+        else:
+            options = []
+            for i in range(self.color_box.maxVisibleItems()):
+                options.append(self.color_box.itemText(i))
+            self.color_box.setCurrentIndex(options.index(settings.color))
 
         # Connecting
         self.save_btn.pressed.connect(self.save)
