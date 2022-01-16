@@ -1,5 +1,6 @@
 import pygame.sprite
 
+
 class Settings:
     def __init__(self):
         # Public
@@ -8,8 +9,8 @@ class Settings:
         self.PRECISE_FPS = False
         self.CONTROLS = 'WASD'
         self.GSF = 1  # Global scaling factor, set by the user settings
-        self.RSF = 1  # Resize (Real) scaling factor, calculated when the window is resized
-        self.MSF = 1  # Minimal Scaling factor, calculated when the window is resized, used by Game Engine
+        self.RSF = 1  # Resize (Real) scaling factor, calculated when resized
+        self.MSF = 1  # Min Scaling, calculated when resized for highways
 
         # Selected, public
         self.selected_car = None
@@ -20,8 +21,6 @@ class Settings:
         self.color = 'Black'
 
         self.level = 1
-        
-        # self.size = (900, 700)
 
         # Private
         self.__SCALING = 1  # Calculated as GSF * RSF
@@ -40,5 +39,6 @@ class Settings:
             else:
                 color[comp] = color[comp] - 100
         return tuple(color)
+
 
 settings = Settings()

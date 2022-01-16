@@ -1,12 +1,7 @@
 # Main libs imports
-import threading
 import time
 
 import pygame
-
-# Other libs imports
-import sys
-import random
 
 # Other game parts
 import gameplay.start_menu.start_menu
@@ -19,7 +14,7 @@ import resources.Highways.Highway
 from gameplay.race import final_window
 
 # System constants
-from main import VERSION
+# EMPTY
 
 # Game constants
 from resources.fonts.FONTS import ORBITRON_REGULAR, ORBITRON_MEDIUM, ORBITRON_EXTRA_BOLD
@@ -90,12 +85,8 @@ class Race:
 
         if not settings.selected_car.crashed:
             self.distance += settings.selected_car.v
-        # print(self.distance)
 
     def key_handler(self, screen, keys):
-        # Use something like "if keys[pygame.K_w]:" to handle different keys.
-        # Please, respect user preference, which is stored in "settings.CONTROLS"
-        # and can be either 'WASD' or 'Arrows'.
         car = settings.selected_car
         if car.crashed:
             return None
@@ -126,12 +117,13 @@ class Race:
             # Make screen resizable again
             screen = pygame.display.set_mode((screen.get_width(), screen.get_height()), pygame.RESIZABLE,
                                              vsync=settings.VSYNC)
+
             # Give the player money for the ride
             # Level multipliers: 100, 125, 150%
             m = self.distance / 2500 * (1 + (settings.level - 1) * .25)
-            # TODO: Call a Qt dialog later
-            crash = pygame.sprite.spritecollide(settings.selected_car, settings.vehicles, False) != [settings.selected_car] or self.d != 0
-            final_window.main(self.distance, settings.level, m, crash=crash)
+            # Call final window
+            is_crash = pygame.sprite.spritecollide(settings.selected_car, settings.vehicles, False) != [settings.selected_car] or self.d != 0
+            final_window.main(self.distance, settings.level, m, crash=is_crash)
             co = resources.currency_operations.CurrencyOperations()
             co.add(int(m))
 
@@ -149,8 +141,6 @@ class Race:
 
     def right_click_handler(self, pos, screen):
         return self
-        # new_menu = gameplay.start_menu.start_menu.StartMenu()
-        # return new_menu
 
     # Should only be called by main.py and race.py
     def exit_to_menu(self, screen):

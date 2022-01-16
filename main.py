@@ -1,12 +1,11 @@
 # Main libs imports
 import pygame
-import PyQt5
-
-# System constants
-VERSION = '0.8.1'
 
 # Other libs imports
-# EMPTY
+import sys
+
+# System constants
+VERSION = '0.9'
 
 # Other game parts
 import gameplay.start_menu.welcome_window
@@ -19,7 +18,8 @@ import gameplay.race.race
 # Game constants
 reinitialization_required = False
 selected_highway = None
-size = width, height = 900, 700  # Default size: 900x700, do not change these variables in code
+# Default size: 900x700, do not change these variables in code
+size = width, height = 900, 700
 
 if __name__ == '__main__':
     # Initializing the game
@@ -28,7 +28,9 @@ if __name__ == '__main__':
     # Setting system settings and variables
     pygame.display.set_caption(f'Racing (version {VERSION})')
     clock = pygame.time.Clock()
-    screen = pygame.display.set_mode(size, pygame.RESIZABLE, vsync=settings.VSYNC)
+    screen = pygame.display.set_mode(size,
+                                     pygame.RESIZABLE,
+                                     vsync=settings.VSYNC)
     running = True
 
     current_frame = 0  # to change speed of different elements
@@ -49,14 +51,16 @@ if __name__ == '__main__':
                 # Quitting...
                 pygame.quit()
                 running = False
-                exit()  # Just to make sure there are no errors
+                sys.exit()  # Just to make sure there are no errors
             if event.type == pygame.MOUSEBUTTONUP:
                 if event.button == pygame.BUTTON_LEFT:
-                    r = current_position.click_handler(pos=event.pos, screen=screen)
+                    r = current_position.click_handler(pos=event.pos,
+                                                       screen=screen)
                     if r is not None:
                         current_position = r
                 if event.button == pygame.BUTTON_RIGHT:
-                    r = current_position.right_click_handler(pos=event.pos, screen=screen)
+                    r = current_position.right_click_handler(pos=event.pos,
+                                                             screen=screen)
                     if r is not None:
                         current_position = r
             # Check if window is resized
@@ -69,15 +73,23 @@ if __name__ == '__main__':
                 if h < height / 3:
                     h = height // 3
                 if (w, h) != (screen.get_width(), screen.get_height()):
-                    screen = pygame.display.set_mode((w, h), pygame.RESIZABLE, vsync=settings.VSYNC)
+                    screen = pygame.display.set_mode((w, h),
+                                                     pygame.RESIZABLE,
+                                                     vsync=settings.VSYNC)
 
-                # Some magical calculations to make the screen look as beautiful as possible
-                settings.RSF = abs(sorted([w / width - 1, h / height - 1])[0] + 1)
-                settings.MSF = abs(sorted([w / width - 1, h / height - 1])[1] + 1)
+                # Some magical calculations to make the screen
+                # look as beautiful as possible
+                size_deviations = sorted([w / width - 1, h / height - 1])
+                settings.RSF = abs(size_deviations[0] + 1)
+                settings.MSF = abs(size_deviations[1] + 1)
                 # Applying scaling
                 settings.update_scaling()
                 del w, h
-                if type(current_position) in [gameplay.car_menu.car_menu.CarMenu, gameplay.highway_menu.highway_menu.HighwayMenu]:
+
+                # This menus require saving selection
+                menus = [gameplay.car_menu.car_menu.CarMenu,
+                         gameplay.highway_menu.highway_menu.HighwayMenu]
+                if type(current_position) in menus:
                     sel = current_position.selected
                     current_position.__init__(selected=sel)
                 else:
@@ -90,7 +102,8 @@ if __name__ == '__main__':
         # Render current menu
         render_code = current_position.render(screen)
         # Check if it's race and the game is finished
-        if render_code == 'exit_to_menu' and type(current_position) == gameplay.race.race.Race:
+        if render_code == 'exit_to_menu' and \
+                type(current_position) == gameplay.race.race.Race:
             current_position = current_position.exit_to_menu(screen)
 
         current_frame = (current_frame + 1) % settings.FPS

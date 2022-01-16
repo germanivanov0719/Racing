@@ -1,4 +1,4 @@
-
+output/
 *.pyc
 *.pyc
 *.pyc
@@ -57,3 +57,5 @@ resources/fonts/.DS_Store
 *.swp
 currency.dat
 .vscode/launch.json
+.vscode
+.vscode/settings.json

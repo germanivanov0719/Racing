@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QApplication, QMessageBox
 import sys
 
 # Other game parts
-# import gameplay.car_menu.car_menu
+# EMPTY
 
 # System constants
 from main import VERSION
@@ -21,8 +21,10 @@ def generate_welcome():
     w = QMessageBox()
     w.setWindowTitle('Welcome!')
     w.setText(f'New: \n\n'
-              f'- You can now choose background color.\n'
+              f'- Optimization and code cleanup.\n'
               f'- Stability improvements.\n'
+              f'This version has no known issues.\n'
+              f'If you find some, contact the development team.\n\n'
               f'See more detailed changelog on GitHub.'
               f'\n\nVersion: {VERSION}\t\t\t')
     w.exec()

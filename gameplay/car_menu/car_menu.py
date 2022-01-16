@@ -15,7 +15,7 @@ from resources.Error_Dialogs.errors_dialogs import generate_not_enough_money_err
 from gameplay.car_menu.confirm_purchase import confirm_car_purchase 
 
 # System constants
-from main import VERSION
+# EMPTY
 
 # Game constants
 from resources.fonts.FONTS import ORBITRON_REGULAR, ORBITRON_MEDIUM, ORBITRON_EXTRA_BOLD

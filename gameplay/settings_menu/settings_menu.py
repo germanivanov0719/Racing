@@ -17,10 +17,10 @@ import gameplay
 from gameplay.settings_menu.settings import settings
 
 # System constants
-from main import VERSION
+# EMPTY
 
 # Game constants
-from resources.fonts.FONTS import ORBITRON_REGULAR, ORBITRON_MEDIUM, ORBITRON_EXTRA_BOLD
+# EMPTY
 
 
 class SettingsMenu(QMainWindow):
@@ -34,10 +34,16 @@ class SettingsMenu(QMainWindow):
         self.gsf_spin.setValue(float(settings.GSF))
         self.precise_framerate_box.setChecked(settings.PRECISE_FPS)
         self.vsync_box.setChecked(settings.VSYNC)
+        if settings.color == 'Black':
+            self.color_box.setCurrentIndex(0)
+        else:
+            options = []
+            for i in range(self.color_box.maxVisibleItems()):
+                options.append(self.color_box.itemText(i))
+            self.color_box.setCurrentIndex(options.index(settings.color))
 
         # Connecting
         self.save_btn.pressed.connect(self.save)
-
 
     def save(self):
         settings.FPS = self.framerate_spin.value()
@@ -53,7 +59,6 @@ class SettingsMenu(QMainWindow):
         else:
             settings.color = self.color_box.currentText()
         self.close()
-
 
 
 def except_hook(cls, exception, traceback):

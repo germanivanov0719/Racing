@@ -15,7 +15,7 @@ from gameplay.settings_menu.settings import settings
 import gameplay.highway_menu.select_level
 
 # System constants
-from main import VERSION
+# EMPTY
 
 # Game constants
 from resources.fonts.FONTS import ORBITRON_REGULAR, ORBITRON_MEDIUM, ORBITRON_EXTRA_BOLD
