@@ -171,15 +171,15 @@ class CarMenu:
 
             # Upgrade buttons
             c, w = ('green', 2)
-            if img_2.get_multipliers()[0] < 2:
+            if img_2.get_multipliers()[0] < 2 and not(img_2.cost):
                 screen.blit(self.upgrade, ((screen.get_width() + self.separator) // 2 - offset_left + self.rect_width + self.separator, base_h + self.upgrade_margin))
                 pygame.draw.rect(screen, pygame.Color(c), ((screen.get_width() + self.separator) // 2 - offset_left + self.rect_width + self.separator - self.upgrade_margin, base_h, self.upgrade_size + 2 * self.upgrade_margin, self.upgrade_size + 2 * self.upgrade_margin), w)
 
-            if img_2.get_multipliers()[1] < 2:
+            if img_2.get_multipliers()[1] < 2 and not(img_2.cost):
                 screen.blit(self.upgrade, ((screen.get_width() + self.separator) // 2 - offset_left + self.rect_width + self.separator, base_h + self.margin + self.speed_y + self.upgrade_margin))
                 pygame.draw.rect(screen, pygame.Color(c), ((screen.get_width() + self.separator) // 2 - offset_left + self.rect_width + self.separator - self.upgrade_margin, base_h + self.margin + self.speed_y, self.upgrade_size + 2 * self.upgrade_margin, self.upgrade_size + 2 * self.upgrade_margin), w)
 
-            if img_2.get_multipliers()[2] < 2:
+            if img_2.get_multipliers()[2] < 2 and not(img_2.cost):
                 screen.blit(self.upgrade, ((screen.get_width() + self.separator) // 2 - offset_left + self.rect_width + self.separator,  base_h + self.margin * 2 + self.brakes_y + self.speed_y + self.upgrade_margin))
                 pygame.draw.rect(screen, pygame.Color(c), ((screen.get_width() + self.separator) // 2 - offset_left + self.rect_width + self.separator - self.upgrade_margin,  base_h + self.margin * 2 + self.brakes_y + self.speed_y, self.upgrade_size + 2 * self.upgrade_margin, self.upgrade_size + 2 * self.upgrade_margin), w)
 
