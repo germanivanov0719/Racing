@@ -10,7 +10,7 @@ import sys
 # EMPTY
 
 # System constants
-from main import VERSION
+# EMPTY
 
 # Game constants
 # EMPTY

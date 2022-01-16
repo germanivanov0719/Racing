@@ -17,10 +17,10 @@ import gameplay
 from gameplay.settings_menu.settings import settings
 
 # System constants
-from main import VERSION
+# EMPTY
 
 # Game constants
-from resources.fonts.FONTS import ORBITRON_REGULAR, ORBITRON_MEDIUM, ORBITRON_EXTRA_BOLD
+# EMPTY
 
 
 class SettingsMenu(QMainWindow):
@@ -45,7 +45,6 @@ class SettingsMenu(QMainWindow):
         # Connecting
         self.save_btn.pressed.connect(self.save)
 
-
     def save(self):
         settings.FPS = self.framerate_spin.value()
         settings.GSF = self.gsf_spin.value()
@@ -60,7 +59,6 @@ class SettingsMenu(QMainWindow):
         else:
             settings.color = self.color_box.currentText()
         self.close()
-
 
 
 def except_hook(cls, exception, traceback):
