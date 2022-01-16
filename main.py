@@ -2,7 +2,7 @@
 import pygame
 
 # Other libs imports
-# EMPTY
+import sys
 
 # System constants
 VERSION = '0.9'
@@ -51,7 +51,7 @@ if __name__ == '__main__':
                 # Quitting...
                 pygame.quit()
                 running = False
-                exit()  # Just to make sure there are no errors
+                sys.exit()  # Just to make sure there are no errors
             if event.type == pygame.MOUSEBUTTONUP:
                 if event.button == pygame.BUTTON_LEFT:
                     r = current_position.click_handler(pos=event.pos,
