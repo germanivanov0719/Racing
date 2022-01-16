@@ -48,6 +48,10 @@ class SettingsMenu(QMainWindow):
             settings.CONTROLS = 'WASD'
         else:
             settings.CONTROLS = 'Arrows'
+        if self.color_box.currentText().split()[0] == 'Black':
+            settings.color = 'Black'
+        else:
+            settings.color = self.color_box.currentText()
         self.close()
 
 

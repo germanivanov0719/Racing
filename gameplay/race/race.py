@@ -82,7 +82,7 @@ class Race:
             for s in pygame.sprite.spritecollide(settings.selected_car, settings.vehicles, False):
                 s.crashed = True
             surface = pygame.Surface((screen.get_width(), screen.get_height())).convert_alpha()
-            self.d += 5 * (settings.FPS / 60)
+            self.d += 5 * (60 / settings.FPS)
             surface.fill((0, 0, 0, self.d))
             screen.blit(surface, (0, 0))
             if self.d > 240:

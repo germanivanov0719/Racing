@@ -21,12 +21,8 @@ def generate_welcome():
     w = QMessageBox()
     w.setWindowTitle('Welcome!')
     w.setText(f'New: \n\n'
-              f'- Window with earnings when game ends.\n'
-              f'- You can now buy cars.\n'
-              f'- Driving outside the highway is no longer possible.\n'
+              f'- You can now choose background color.\n'
               f'- Stability improvements.\n'
-              f'- A lot more other changes.\n'
-              f'\nThis should be considered a stable release\n\n'
               f'See more detailed changelog on GitHub.'
               f'\n\nVersion: {VERSION}\t\t\t')
     w.exec()
