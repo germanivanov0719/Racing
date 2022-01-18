@@ -1,4 +1,7 @@
-class Explode(pygame.sprite.Sprite):
+import pygame
+
+
+class Explosion(pygame.sprite.Sprite):
     def __init__(self, sheet, columns, rows, x, y):
         super().__init__()
         self.frames = []
@@ -25,12 +28,14 @@ class Explode(pygame.sprite.Sprite):
         except:
             pass
 
+
 def load_image(name):
     image = pygame.image.load(name)
     image = image.convert_alpha()
     return image
 
-explode = Explode(load_image("explosion.png"), 4, 8, 50, 50)
-while explode.cur_frame <= len(explode.frames) - 1:
-    screen.blit(explode.update(), (0, 0))
+
+# explode = Explode(load_image("explosion.png"), 4, 8, 50, 50)
+# while explode.cur_frame <= len(explode.frames) - 1:
+#     screen.blit(explode.update(), (0, 0))
     # screen.blit(explode.update())

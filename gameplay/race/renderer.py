@@ -14,6 +14,7 @@ import resources.Highways.Highway
 import resources.Vehicles.Vehicle
 import resources.currency_operations
 from gameplay.settings_menu.settings import settings
+from resources.Explosion.explosion_animation import Explosion, load_image
 
 # System constants
 # EMPTY
@@ -113,6 +114,7 @@ class AsyncRenderer:
         self.last_car = None
         self.r = Renderer(screen)
         self.distance = 0
+        self.explosion = Explosion(load_image("resources/Explosion/explosion.png"), 8, 4, 50, 50)
 
     def generate(self):
         threading.Thread(target=self.check_daemons, daemon=True).start()
@@ -184,3 +186,8 @@ class AsyncRenderer:
             self.stop
             sleep(0.001)
             self.create_daemons()
+
+    def explosion_animation(self, pos):
+        while self.explosion.cur_frame <= len(self.explosion.frames) - 1:
+            self.explosion.update()
+            sleep(0.05)

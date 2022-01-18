@@ -1,4 +1,5 @@
 # Main libs imports
+import threading
 import time
 
 import pygame
@@ -12,6 +13,7 @@ import resources.currency_operations
 from gameplay.race.reset_on_exit import reset
 import resources.Highways.Highway
 from gameplay.race import final_window
+import resources.Explosion
 
 # System constants
 # EMPTY
@@ -72,7 +74,12 @@ class Race:
                          (self.margin - 5, self.margin + self.heading_y // 2 - self.menu_y // 2 - 5,
                           self.menu_x + 10, self.menu_y + 10), 1)
 
-        # Check player collisions
+        # Start explosion animation one time only
+        if pygame.sprite.spritecollide(settings.selected_car, settings.vehicles, False) != [settings.selected_car] and self.d == 0:
+            pos = settings.selected_car.rect.x, settings.selected_car.rect.y
+            threading.Thread(target=self.ar.explosion_animation, daemon=True, args=(pos,)).start()
+
+        # Do the fade-out animation and get explosion animation
         if pygame.sprite.spritecollide(settings.selected_car, settings.vehicles, False) != [settings.selected_car] or self.d != 0:
             for s in pygame.sprite.spritecollide(settings.selected_car, settings.vehicles, False):
                 s.crashed = True
@@ -80,7 +87,10 @@ class Race:
             self.d += 5 * (60 / settings.FPS)
             surface.fill((0, 0, 0, self.d))
             screen.blit(surface, (0, 0))
-            if self.d > 240:
+            car_pos = settings.selected_car.rect.x, settings.selected_car.rect.y
+            if self.ar.explosion.cur_frame < len(self.ar.explosion.frames):
+                screen.blit(self.ar.explosion.action, [i - 100 for i in car_pos])
+            if self.d > 254:
                 return 'exit_to_menu'
 
         if not settings.selected_car.crashed:

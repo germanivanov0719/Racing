@@ -5,7 +5,7 @@ import pygame
 import sys
 
 # System constants
-VERSION = '0.9'
+VERSION = '0.9.1'
 
 # Other game parts
 import gameplay.start_menu.welcome_window
