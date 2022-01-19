@@ -43,8 +43,10 @@ class Race:
         self.distance = 0
         # Darken animation
         self.d = 0
+        # Store pause state
+        self.paused = False
 
-    def render(self, screen):
+    def render(self, screen, paused=False):
         # Initialize renderer and async renderer
         if self.r is None or self.ar is None:
             self.r = gameplay.race.renderer.Renderer(screen)
@@ -55,17 +57,21 @@ class Race:
         if not self.screen_locked:
             screen = pygame.display.set_mode((screen.get_width(), screen.get_height()), vsync=settings.VSYNC)
             self.screen_locked = True
+            
+        self.paused = paused # Store paused state
 
         # Call all threads to make them start performing background tasks before rendering
         self.ar.generate()
 
         # Game engine:
-        # Highways
+        # Rendering
         self.r.render_background()
-        self.r.move_highways()
-        # Cars
         self.r.render_cars()
-        self.r.move_traffic()
+        
+        # Move sprite
+        if not paused:
+            self.r.move_highways()
+            self.r.move_traffic()
 
         # Render GUI parts (must always be at the top):
         # Menu button
@@ -97,6 +103,8 @@ class Race:
             self.distance += settings.selected_car.v
 
     def key_handler(self, screen, keys):
+        if self.paused:
+            return None
         car = settings.selected_car
         if car.crashed:
             return None
