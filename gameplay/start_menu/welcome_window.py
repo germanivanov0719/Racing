@@ -20,11 +20,7 @@ def generate_welcome():
     app = QApplication(sys.argv)
     w = QMessageBox()
     w.setWindowTitle('Welcome!')
-    w.setText(f'New: \n\n'
-              f'- Optimization and code cleanup.\n'
-              f'- Stability improvements.\n'
-              f'This version has no known issues.\n'
-              f'If you find some, contact the development team.\n\n'
-              f'See more detailed changelog on GitHub.'
+    w.setText(f'This is the first stable version of this game.\n'
+              f'To find get more info, visit our GitHub.\n\n'
               f'\n\nVersion: {VERSION}\t\t\t')
     w.exec()
