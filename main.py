@@ -5,7 +5,7 @@ import pygame
 import sys
 
 # System constants
-VERSION = '0.9.1'
+VERSION = '1.0'
 
 # Other game parts
 import gameplay.start_menu.welcome_window
@@ -40,6 +40,9 @@ if __name__ == '__main__':
 
     # Initialize the 1st menu
     current_position = gameplay.start_menu.start_menu.StartMenu()
+    
+    # Pause for race()
+    paused = False
 
     while running:
         screen.fill(settings.get_dimmed_color())
@@ -48,7 +51,7 @@ if __name__ == '__main__':
                 # Make race stop if in game
                 if type(current_position) == gameplay.race.race.Race:
                     current_position = current_position.exit_to_menu(screen)
-                # Quitting...
+                # Quitting
                 pygame.quit()
                 running = False
                 sys.exit()  # Just to make sure there are no errors
@@ -94,17 +97,24 @@ if __name__ == '__main__':
                     current_position.__init__(selected=sel)
                 else:
                     current_position.__init__()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    paused = not paused
 
         # To handle holded keys in race
         if type(current_position) == gameplay.race.race.Race:
             current_position.key_handler(screen, keys=pygame.key.get_pressed())
 
         # Render current menu
-        render_code = current_position.render(screen)
+        if type(current_position) == gameplay.race.race.Race:
+            render_code = current_position.render(screen, paused)
+        else:
+            render_code = current_position.render(screen)
+
         # Check if it's race and the game is finished
-        if render_code == 'exit_to_menu' and \
-                type(current_position) == gameplay.race.race.Race:
+        if render_code == 'exit_to_menu' and type(current_position) == gameplay.race.race.Race:
             current_position = current_position.exit_to_menu(screen)
+            paused = False
 
         current_frame = (current_frame + 1) % settings.FPS
         pygame.display.flip()
