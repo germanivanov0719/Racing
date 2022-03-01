@@ -11,15 +11,24 @@ from PIL import Image
 def create_all_vehicles(initialize=True):
     vehicles = []
     # Connect to the DB
-    con = sqlite3.connect('resources/Vehicles/vehicles_table.db')
+    con = sqlite3.connect("resources/Vehicles/vehicles_table.db")
     cur = con.cursor()
-    data = cur.execute('SELECT * from vehicle_table').fetchall()
+    data = cur.execute("SELECT * from vehicle_table").fetchall()
     cur.close()
     # Create vehicles
     for car in data:
         # print(*car[0:5], (car[5], car[6], car[7]))
-        vehicles.append(resources.Vehicles.Vehicle.Vehicle(*car[0:5], (car[5], car[6], car[7]), initialize=initialize, cost=car[8]))
-        vehicles[-1].set_texture(vehicles[-1].get_texture(width=30))  # Make all cars have same width
+        vehicles.append(
+            resources.Vehicles.Vehicle.Vehicle(
+                *car[0:5],
+                (car[5], car[6], car[7]),
+                initialize=initialize,
+                cost=car[8],
+            )
+        )
+        vehicles[-1].set_texture(
+            vehicles[-1].get_texture(width=30)
+        )  # Make all cars have same width
 
     return vehicles
 
@@ -38,11 +47,20 @@ def create_all_vehicles(initialize=True):
 
 
 class Vehicle(pygame.sprite.Sprite):
-    def __init__(self, name, img, speed, brakes, acceleration,
-                 multipliers=(1, 1, 1),
-                 x=0, y=0,
-                 initialize=True, reverse=False,
-                 cost=None):
+    def __init__(
+        self,
+        name,
+        img,
+        speed,
+        brakes,
+        acceleration,
+        multipliers=(1, 1, 1),
+        x=0,
+        y=0,
+        initialize=True,
+        reverse=False,
+        cost=None,
+    ):
         # To prevent non-initialized object from rendering
         self.render = initialize
 
@@ -87,7 +105,11 @@ class Vehicle(pygame.sprite.Sprite):
         return name
 
     def pil_to_surf(self, pilImage):
-        return self.load_image(pygame.image.fromstring(pilImage.tobytes(), pilImage.size, pilImage.mode).convert())
+        return self.load_image(
+            pygame.image.fromstring(
+                pilImage.tobytes(), pilImage.size, pilImage.mode
+            ).convert()
+        )
 
     def get_texture(self, scale=1, width=None, height=None):
         py_img = self.pil_to_surf(self.im)
@@ -97,7 +119,9 @@ class Vehicle(pygame.sprite.Sprite):
             scale = height / self.image.get_rect()[3]
         if width is not None and height is not None:
             return pygame.transform.scale(py_img, (width, height))
-        return pygame.transform.scale(py_img, (self.rect[2] * scale, self.rect[3] * scale))
+        return pygame.transform.scale(
+            py_img, (self.rect[2] * scale, self.rect[3] * scale)
+        )
 
     def get_width(self, scale=1):
         return self.rect[2] * scale // 1
@@ -106,26 +130,36 @@ class Vehicle(pygame.sprite.Sprite):
         return self.rect[3] * scale // 1
 
     def get_multipliers(self):
-        return self.speed_multiplier, self.brakes_multiplier, self.acceleration_multiplier
+        return (
+            self.speed_multiplier,
+            self.brakes_multiplier,
+            self.acceleration_multiplier,
+        )
 
     def set_speed_multiplier(self, new_speed_multiplier):
-        con = sqlite3.connect('resources/Vehicles/vehicles_table.db')
+        con = sqlite3.connect("resources/Vehicles/vehicles_table.db")
         cur = con.cursor()
-        cur.execute(f"UPDATE vehicle_table SET speed_multiplier = {new_speed_multiplier} WHERE name = '{self.name}'")
+        cur.execute(
+            f"UPDATE vehicle_table SET speed_multiplier = {new_speed_multiplier} WHERE name = '{self.name}'"
+        )
         con.commit()
         con.close()
 
     def set_brakes_multiplier(self, new_brakes_multiplier):
-        con = sqlite3.connect('resources/Vehicles/vehicles_table.db')
+        con = sqlite3.connect("resources/Vehicles/vehicles_table.db")
         cur = con.cursor()
-        cur.execute(f"UPDATE vehicle_table SET brakes_multiplier = {new_brakes_multiplier} WHERE name = '{self.name}'")
+        cur.execute(
+            f"UPDATE vehicle_table SET brakes_multiplier = {new_brakes_multiplier} WHERE name = '{self.name}'"
+        )
         con.commit()
         con.close()
 
     def set_acceleration_multiplier(self, new_acceleration_multiplier):
-        con = sqlite3.connect('resources/Vehicles/vehicles_table.db')
+        con = sqlite3.connect("resources/Vehicles/vehicles_table.db")
         cur = con.cursor()
-        cur.execute(f"UPDATE vehicle_table SET acceleration_multiplier = {new_acceleration_multiplier} WHERE name = '{self.name}'")
+        cur.execute(
+            f"UPDATE vehicle_table SET acceleration_multiplier = {new_acceleration_multiplier} WHERE name = '{self.name}'"
+        )
         con.commit()
         con.close()
 
@@ -155,8 +189,10 @@ class Vehicle(pygame.sprite.Sprite):
         self.reversed = not self.reversed
 
     def set_purchased(self):
-        con = sqlite3.connect('resources/Vehicles/vehicles_table.db')
+        con = sqlite3.connect("resources/Vehicles/vehicles_table.db")
         cur = con.cursor()
-        cur.execute(f"UPDATE vehicle_table SET cost = NULL WHERE name = '{self.name}'")
+        cur.execute(
+            f"UPDATE vehicle_table SET cost = NULL WHERE name = '{self.name}'"
+        )
         con.commit()
         con.close()

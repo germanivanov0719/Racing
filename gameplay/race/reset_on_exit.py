@@ -6,9 +6,9 @@
 import resources.Vehicles.Vehicle
 from gameplay.settings_menu.settings import settings
 
+
 def reset() -> None:
     cars = resources.Vehicles.Vehicle.create_all_vehicles()
     for car_obj in cars:
         if settings.selected_car.name == car_obj.name:
             settings.selected_car = car_obj
-

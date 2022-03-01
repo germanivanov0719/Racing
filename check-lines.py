@@ -15,18 +15,18 @@ if len(args) == 0:
 i = 0
 while i < len(args):
     try:
-        open(args[i], 'r', encoding='utf-8')
+        open(args[i], "r", encoding="utf-8")
     except Exception:
         print(f"File '{args[i]}' not found.")
-        print('Trying to continue anyway...')
+        print("Trying to continue anyway...")
         del args[i]
 
     try:
-        with open(args[i], 'r', encoding='utf-8') as f:
+        with open(args[i], "r", encoding="utf-8") as f:
             ln = 0
             lines = f.read().splitlines()
             for s in lines:
-                if s.strip() != "" and s.strip()[0] != '#':
+                if s.strip() != "" and s.strip()[0] != "#":
                     ln += 1
             r += ln
             print(f"File {args[i]}: {ln} lines.")

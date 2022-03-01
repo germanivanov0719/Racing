@@ -7,7 +7,7 @@ class Settings:
         self.VSYNC = True
         self.FPS = 60
         self.PRECISE_FPS = False
-        self.CONTROLS = 'WASD'
+        self.CONTROLS = "WASD"
         self.GSF = 1  # Global scaling factor, set by the user settings
         self.RSF = 1  # Resize (Real) scaling factor, calculated when resized
         self.MSF = 1  # Min Scaling, calculated when resized for highways
@@ -18,7 +18,7 @@ class Settings:
         self.vehicles = pygame.sprite.Group()
         self.NPC_v = 5
         self.scroll = pygame.sprite.Group()
-        self.color = 'Black'
+        self.color = "Black"
 
         self.level = 1
 

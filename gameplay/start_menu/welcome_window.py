@@ -19,8 +19,10 @@ from main import VERSION
 def generate_welcome():
     app = QApplication(sys.argv)
     w = QMessageBox()
-    w.setWindowTitle('Welcome!')
-    w.setText(f'This is the first stable version of this game.\n'
-              f'To find get more info, visit our GitHub.\n\n'
-              f'\n\nVersion: {VERSION}\t\t\t')
+    w.setWindowTitle("Welcome!")
+    w.setText(
+        f"This is the first stable version of this game.\n"
+        f"To find get more info, visit our GitHub.\n\n"
+        f"\n\nVersion: {VERSION}\t\t\t"
+    )
     w.exec()

@@ -9,12 +9,13 @@ from gameplay.settings_menu.settings import settings
 def create_all_highways():
     highways = []
     # Change to get from DB
-    con = sqlite3.connect('resources/Highways/highways_table.db')
+    con = sqlite3.connect("resources/Highways/highways_table.db")
     cur = con.cursor()
-    hw = cur.execute('SELECT * from highway_table').fetchall()
+    hw = cur.execute("SELECT * from highway_table").fetchall()
     for highway in hw:
         highways.append(resources.Highways.Highway.Highway(*highway[0:4]))
     return highways
+
 
 # CREATE TABLE "highway_table" (
 # 	"name"	TEXT NOT NULL UNIQUE,
@@ -47,7 +48,9 @@ class Highway(pygame.sprite.Sprite):
             scale = height / self.rect.h
         if width is not None and height is not None:
             return pygame.transform.scale(self.image, (width, height))
-        return pygame.transform.scale(self.image, (self.rect[2] * scale // 1, self.rect[3] * scale // 1))
+        return pygame.transform.scale(
+            self.image, (self.rect[2] * scale // 1, self.rect[3] * scale // 1)
+        )
 
     def set_texture(self, surface: pygame.Surface):
         self.image = surface

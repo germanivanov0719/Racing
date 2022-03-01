@@ -26,15 +26,15 @@ from gameplay.settings_menu.settings import settings
 class SettingsMenu(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('resources/Settings/settings.ui', self)
-        self.setWindowTitle('Settings')
+        uic.loadUi("resources/Settings/settings.ui", self)
+        self.setWindowTitle("Settings")
 
         # Setting previous values
         self.framerate_spin.setValue(settings.FPS)
         self.gsf_spin.setValue(float(settings.GSF))
         self.precise_framerate_box.setChecked(settings.PRECISE_FPS)
         self.vsync_box.setChecked(settings.VSYNC)
-        if settings.color == 'Black':
+        if settings.color == "Black":
             self.color_box.setCurrentIndex(0)
         else:
             options = []
@@ -51,11 +51,11 @@ class SettingsMenu(QMainWindow):
         settings.PRECISE_FPS = bool(self.precise_framerate_box.checkState())
         settings.VSYNC = bool(self.vsync_box.checkState())
         if self.controls.checkedButton() == self.wasd_btn:
-            settings.CONTROLS = 'WASD'
+            settings.CONTROLS = "WASD"
         else:
-            settings.CONTROLS = 'Arrows'
-        if self.color_box.currentText().split()[0] == 'Black':
-            settings.color = 'Black'
+            settings.CONTROLS = "Arrows"
+        if self.color_box.currentText().split()[0] == "Black":
+            settings.color = "Black"
         else:
             settings.color = self.color_box.currentText()
         self.close()
@@ -67,10 +67,14 @@ def except_hook(cls, exception, traceback):
 
 def main():
     # Fix HiDPI
-    if hasattr(QtCore.Qt, 'AA_EnableHighDpiScaling'):
-        QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
-    if hasattr(QtCore.Qt, 'AA_UseHighDpiPixmaps'):
-        QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
+    if hasattr(QtCore.Qt, "AA_EnableHighDpiScaling"):
+        QtWidgets.QApplication.setAttribute(
+            QtCore.Qt.AA_EnableHighDpiScaling, True
+        )
+    if hasattr(QtCore.Qt, "AA_UseHighDpiPixmaps"):
+        QtWidgets.QApplication.setAttribute(
+            QtCore.Qt.AA_UseHighDpiPixmaps, True
+        )
     app = QApplication(sys.argv)
     ex = SettingsMenu()
     ex.show()
@@ -80,5 +84,5 @@ def main():
     del ex
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

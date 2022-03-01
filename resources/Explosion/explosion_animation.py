@@ -11,13 +11,17 @@ class Explosion(pygame.sprite.Sprite):
         self.rect = self.rect.move(x, y)
 
     def cut_sheet(self, sheet, columns, rows):
-        self.rect = pygame.Rect(0, 0, sheet.get_width() // columns,
-                                sheet.get_height() // rows)
+        self.rect = pygame.Rect(
+            0, 0, sheet.get_width() // columns, sheet.get_height() // rows
+        )
         for j in range(rows):
             for i in range(columns):
                 frame_location = (self.rect.w * i, self.rect.h * j)
-                self.frames.append(sheet.subsurface(pygame.Rect(
-                    frame_location, self.rect.size)))
+                self.frames.append(
+                    sheet.subsurface(
+                        pygame.Rect(frame_location, self.rect.size)
+                    )
+                )
 
     def update(self):
         self.cur_frame = (self.cur_frame + 1) % len(self.frames)
@@ -25,7 +29,7 @@ class Explosion(pygame.sprite.Sprite):
             self.action = self.frames[self.cur_frame]
             self.cur_frame += 1
             return self.action
-        except:
+        except Exception:
             pass
 
 
@@ -33,9 +37,3 @@ def load_image(name):
     image = pygame.image.load(name)
     image = image.convert_alpha()
     return image
-
-
-# explode = Explode(load_image("explosion.png"), 4, 8, 50, 50)
-# while explode.cur_frame <= len(explode.frames) - 1:
-#     screen.blit(explode.update(), (0, 0))
-    # screen.blit(explode.update())
